@@ -1,4 +1,4 @@
-package com.example.myhr
+package com.tstites.myhr
 
 import org.junit.Test
 

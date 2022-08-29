@@ -1,4 +1,4 @@
-package com.example.myhr.ui.theme
+package com.tstites.myhr.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

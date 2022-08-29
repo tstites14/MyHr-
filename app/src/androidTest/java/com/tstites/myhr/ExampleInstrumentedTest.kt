@@ -1,4 +1,4 @@
-package com.example.myhr
+package com.tstites.myhr
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

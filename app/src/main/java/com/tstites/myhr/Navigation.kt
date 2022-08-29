@@ -1,11 +1,12 @@
-package com.example.myhr
+package com.tstites.myhr
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.myhr.ui.screens.HomeScreen
-import com.example.myhr.ui.screens.Screens
+import com.tstites.myhr.ui.screens.EmployeeList
+import com.tstites.myhr.ui.screens.HomeScreen
+import com.tstites.myhr.ui.screens.Screens
 
 @Composable
 fun Navigation() {
@@ -14,6 +15,10 @@ fun Navigation() {
         composable(Screens.HomeScreen.route) {
             val home = HomeScreen()
             home.HomeScreenLayout(navController = navController)
+        }
+        composable(Screens.EmployeeList.route) {
+            val eList = EmployeeList()
+            eList.EmployeeListLayout(navController = navController)
         }
     }
 }
