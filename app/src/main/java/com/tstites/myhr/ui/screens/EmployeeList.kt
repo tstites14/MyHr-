@@ -2,7 +2,6 @@ package com.tstites.myhr.ui.screens
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +12,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,14 +30,13 @@ class EmployeeList {
     @Composable
     fun EmployeeListLayout(navController: NavController) {
         val context = LocalContext.current
-        var data = ArrayList<Employee>()
+        var data: ArrayList<Employee>
         runBlocking {
             data = ArrayList(setupDB(context))
         }
 
         LazyColumn(modifier = Modifier
-            .fillMaxSize()
-            .background(Color.Red)) {
+            .fillMaxSize()) {
             items(data, itemContent = { emp ->
                 val index = data.indexOf(emp)
                 
