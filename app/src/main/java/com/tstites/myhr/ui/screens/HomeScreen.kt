@@ -14,6 +14,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.tstites.myhr.db.DBConnection
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class HomeScreen {
     @Composable
@@ -23,7 +28,9 @@ class HomeScreen {
             verticalArrangement = Arrangement.Center) {
             IconButton(modifier = Modifier.weight(0.33f)
                 .background(Color.Yellow),
-                onClick = { Log.i("test","1") }) {
+                onClick = {
+                    navController.navigate(Screens.EmployeeList.route)
+                }) {
                 Icon(modifier = Modifier.fillMaxSize(),
                     imageVector = Icons.Filled.Person,
                     contentDescription = "Employee Lookup"
