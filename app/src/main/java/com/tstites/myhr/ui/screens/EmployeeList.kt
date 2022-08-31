@@ -2,22 +2,22 @@ package com.tstites.myhr.ui.screens
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
+import androidx.compose.material.*
+import androidx.compose.material.SnackbarDefaults.backgroundColor
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.material.Text
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -34,25 +34,52 @@ class EmployeeList {
         runBlocking {
             data = ArrayList(setupDB(context))
         }
+        Column {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(.93f)
+            ) {
+                items(data, itemContent = { emp ->
+                    val index = data.indexOf(emp)
 
-        LazyColumn(modifier = Modifier
-            .fillMaxSize()) {
-            items(data, itemContent = { emp ->
-                val index = data.indexOf(emp)
-                
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    Card(
-                        shape = RoundedCornerShape(4.dp),
-                        modifier = Modifier.fillMaxWidth()
-                            .padding(8.dp)
-                    ) {
-                        Text(emp.name ?: "SAMPLE", style = TextStyle(
-                            fontSize = 20.sp,
-                            textAlign = TextAlign.Center
-                        ), modifier = Modifier.padding(16.dp))
+                    Row(modifier = Modifier.fillMaxWidth()) {
+                        Card(
+                            shape = RoundedCornerShape(4.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                        ) {
+                            Column {
+                                Text(
+                                    emp.name ?: "SAMPLE", style = TextStyle(
+                                        fontSize = 20.sp,
+                                    ), modifier = Modifier.padding(8.dp)
+                                )
+                                Text(
+                                    emp.jobTitle ?: "IT", style = TextStyle(
+                                        fontSize = 16.sp,
+                                        color = Color.DarkGray
+                                    ), modifier = Modifier.padding(8.dp)
+                                )
+                            }
+                        }
                     }
-                }
-            })
+                })
+            }
+            BottomAppBar(backgroundColor = MaterialTheme.colors.primarySurface,
+                contentColor = contentColorFor(backgroundColor),
+                elevation = AppBarDefaults.BottomAppBarElevation,
+                content = {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Outlined.Settings, "Filter search",
+                            tint = Color.White)
+                    }
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(Icons.Outlined.Search, "Search",
+                            tint = Color.White)
+                    }
+                })
         }
     }
 
