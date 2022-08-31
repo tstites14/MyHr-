@@ -92,11 +92,11 @@ class EmployeeList {
     }
 
     private fun setupDB(context: Context): List<Employee> {
-        var data = ArrayList<Employee>()
-        /*CoroutineScope(IO).launch {
-            data = ArrayList(pullEmployeeData(context))
-        }*/
-        data = ArrayList(pullEmployeeData(context))
+        if (getEmployeeCount(context) == 0) {
+            insertData(context)
+        }
+
+        val data: ArrayList<Employee> = ArrayList(pullEmployeeData(context))
         Log.i("TEST", data.toString())
 
         return data
@@ -106,15 +106,24 @@ class EmployeeList {
         val eTable = DBConnection().buildDB(context)
         val eDao = eTable.employeeDao()
 
-        val e1: Employee = Employee(1, "John Doe", "12 Test Ave", "Orlando", "FL",
-            "Information Technology", "Junior Software Engineer", 100)
-        val e2: Employee = Employee(2, "James Phillips", "432 Sample Ave", "Kissimmee", "FL",
-            "Information Technology", "Software Engineer", 101)
-        //val e3: Employee
-        //val e4: Employee
-        //val e5: Employee
+        if (eDao.getTableEntries() == 0) {
+            val e1: Employee = Employee(1, "John Doe", "12 Test Ave", "Orlando", "FL",
+                "Information Technology", "Junior Software Engineer", 100)
+            val e2: Employee = Employee(2, "James Phillips", "432 Sample Ave", "Kissimmee", "FL",
+                "Information Technology", "Software Engineer", 101)
+            //val e3: Employee
+            //val e4: Employee
+            //val e5: Employee
 
-        eDao.insertNewEmployee(e1, e2)
+            eDao.insertNewEmployee(e1, e2)
+        }
+    }
+
+    fun getEmployeeCount(context: Context): Int {
+        val employeeTable = DBConnection().buildDB(context)
+        val empDao = employeeTable.employeeDao()
+
+        return empDao.getTableEntries()
     }
 
     fun pullEmployeeData(context: Context): List<Employee> {

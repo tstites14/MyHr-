@@ -25,6 +25,9 @@ interface EmployeeDao {
     @Query("SELECT * FROM Employee WHERE department = :department")
     fun getEmployeesFromDepartment(department: String): List<Employee>
 
+    @Query("SELECT COUNT(*) FROM Employee")
+    fun getTableEntries(): Int
+
     @Insert
     fun insertNewEmployee(vararg employee: Employee)
 
