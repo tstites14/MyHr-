@@ -2,6 +2,7 @@ package com.tstites.myhr.ui.screens
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -49,7 +50,9 @@ class EmployeeList {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
-                        ) {
+                                .clickable {
+                                    navController.navigate(Screens.EmployeeDetails.route)
+                                }) {
                             Column {
                                 Text(
                                     emp.name ?: "SAMPLE", style = TextStyle(
