@@ -10,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
@@ -101,6 +102,12 @@ class EmployeeList {
                         filterAlert.value = false
                         searchAlert.value = true
                     }, selected = false)
+                    BottomNavigationItem(icon = { Icon(Icons.Outlined.Refresh,
+                        "Refresh Data", tint = Color.White) },
+                        onClick = {
+                            data.clear()
+                            data.addAll(originalData)
+                        }, selected = false)
 
                     //If the search button is pressed open the search dialog box
                     if (searchAlert.value) {
