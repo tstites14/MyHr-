@@ -199,18 +199,23 @@ class EmployeeList {
 
         data.forEach {
             //Check for phone extension match
-            if (term.isDigitsOnly() && term.toInt() == it.phoneExtension) {
-                results.add(it)
-            } else if (it.name?.contains(term) == true) {
-                results.add(it)
-            } else if (it.department?.contains(term) == true) {
-                results.add(it)
-            } else if (it.jobTitle?.contains(term) == true) {
-                results.add(it)
+            if (term.isNotEmpty()) {
+                if (term.isDigitsOnly() && term.toInt() == it.phoneExtension) {
+                    results.add(it)
+                } else if (it.name?.contains(term) == true) {
+                    results.add(it)
+                } else if (it.department?.contains(term) == true) {
+                    results.add(it)
+                } else if (it.jobTitle?.contains(term) == true) {
+                    results.add(it)
+                }
             }
         }
 
-        return results.toList()
+        return if (results.isNotEmpty())
+            results.toList()
+        else
+            emptyList()
     }
 
     private fun filterDB(terms: List<String>, data: ArrayList<Employee>) {
