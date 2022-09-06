@@ -90,21 +90,17 @@ class EmployeeList {
                     val filterAlert = remember { mutableStateOf(false) }
                     val searchAlert = remember { mutableStateOf(false) }
 
-                    IconButton(onClick = {
+                    BottomNavigationItem(icon = { Icon(
+                        painterResource(id = R.drawable.ic_outline_filter),
+                        "Filter search", tint = Color.White) }, onClick = {
                         filterAlert.value = true
                         searchAlert.value = false
-                    }) {
-                        Icon(
-                            painterResource(id = R.drawable.ic_outline_filter),
-                            "Filter search", tint = Color.White)
-                    }
-                    IconButton(onClick = {
+                    }, selected = false)
+                    BottomNavigationItem(icon = { Icon(Icons.Outlined.Search,
+                        "Search", tint = Color.White) }, onClick = {
                         filterAlert.value = false
                         searchAlert.value = true
-                    }) {
-                        Icon(Icons.Outlined.Search, "Search",
-                            tint = Color.White)
-                    }
+                    }, selected = false)
 
                     //If the search button is pressed open the search dialog box
                     if (searchAlert.value) {
