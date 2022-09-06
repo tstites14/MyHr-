@@ -159,6 +159,10 @@ class EmployeeList {
                                 val departmentField = remember { mutableStateOf("") }
                                 val titleField = remember { mutableStateOf("") }
 
+                                //Reset data to original state before starting a new search
+                                data.clear()
+                                data.addAll(originalData)
+
                                 TextField(modifier = Modifier.padding(8.dp),
                                     placeholder = { Text("Job title") },
                                     value = titleField.value,
@@ -169,7 +173,14 @@ class EmployeeList {
                                     onValueChange = { departmentField.value = it })
                                 Button(modifier = Modifier.fillMaxWidth(),
                                     onClick = {
-                                        /*TODO*/
+                                        val resultData = filterDB(listOf(departmentField.value, titleField.value), data)
+
+                                        if (resultData.isNotEmpty()) {
+                                            data.clear()
+                                            data.addAll(resultData)
+                                        }
+
+                                        filterAlert.value = false
                                     }) {
                                     Text("Apply Filter")
                                 }
@@ -219,10 +230,26 @@ class EmployeeList {
             emptyList()
     }
 
-    private fun filterDB(terms: List<String>, data: ArrayList<Employee>) {
+    private fun filterDB(terms: List<String>, data: MutableList<Employee>): List<Employee> {
         val results = ArrayList<Employee>()
 
+        data.forEach { emp ->
+            terms.forEach { term ->
+                if (term.isNotEmpty()) {
+                    //Make sure that the found employee isn't already in the results
+                    if (emp.department?.contains(term) == true && results.find { emp.id == it.id } == null) {
+                        results.add(emp)
+                    } else if (emp.jobTitle?.contains(term) == true && results.find { emp.id == it.id } == null) {
+                        results.add(emp)
+                    }
+                }
+            }
+        }
 
+        return if (results.isNotEmpty())
+            results.toList()
+        else
+            emptyList()
     }
 
     private fun setupDB(context: Context, dbConnection: AppDatabase): List<Employee> {
