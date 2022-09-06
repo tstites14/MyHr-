@@ -13,6 +13,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,13 +77,87 @@ class EmployeeList {
                 contentColor = contentColorFor(backgroundColor),
                 elevation = AppBarDefaults.BottomAppBarElevation,
                 content = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    val filterAlert = remember { mutableStateOf(false) }
+                    val searchAlert = remember { mutableStateOf(false) }
+
+                    IconButton(onClick = {
+                        filterAlert.value = true
+                        searchAlert.value = false
+                    }) {
                         Icon(Icons.Outlined.Settings, "Filter search",
                             tint = Color.White)
                     }
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        filterAlert.value = false
+                        searchAlert.value = true
+                    }) {
                         Icon(Icons.Outlined.Search, "Search",
                             tint = Color.White)
+                    }
+
+                    if (searchAlert.value) {
+                        AlertDialog(onDismissRequest = {
+                            filterAlert.value = false
+                            searchAlert.value = false
+                        }, buttons = {
+                            Column(
+                                modifier = Modifier.padding(8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally) {
+                                val searchField = remember { mutableStateOf("")}
+
+                                TextField(modifier = Modifier.padding(8.dp),
+                                    placeholder = { Text("Search") },
+                                    value = searchField.value,
+                                    onValueChange = { searchField.value = it })
+                                Button(modifier = Modifier.fillMaxWidth(),
+                                    onClick =  {
+                                        /*TODO*/
+                                    }) {
+                                    Text("Search")
+                                }
+                                Button(modifier = Modifier.fillMaxWidth(),
+                                    onClick =  {
+                                        filterAlert.value = false
+                                        searchAlert.value = false
+                                }) {
+                                    Text("Cancel")
+                                }
+                            }
+                        })
+                    } else if (filterAlert.value) {
+                        AlertDialog(onDismissRequest = {
+                            filterAlert.value = false
+                            searchAlert.value = false
+                        }, buttons = {
+                            Column(
+                                modifier = Modifier.padding(8.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally) {
+                                val departmentField = remember { mutableStateOf("") }
+                                val titleField = remember { mutableStateOf("") }
+
+                                TextField(modifier = Modifier.padding(8.dp),
+                                    placeholder = { Text("Job title") },
+                                    value = titleField.value,
+                                    onValueChange = { titleField.value = it },)
+                                TextField(modifier = Modifier.padding(8.dp),
+                                    placeholder = { Text("Department") },
+                                    value = departmentField.value,
+                                    onValueChange = { departmentField.value = it })
+                                Button(modifier = Modifier.fillMaxWidth(),
+                                    onClick = {
+                                        /*TODO*/
+                                    }) {
+                                    Text("Apply Filter")
+                                }
+                                Button(modifier = Modifier.fillMaxWidth(),
+                                    onClick =  {
+                                        filterAlert.value = false
+                                        searchAlert.value = false
+                                    }) {
+                                    Text("Cancel")
+                                }
+                            }
+                        })
                     }
                 })
         }
@@ -105,7 +182,7 @@ class EmployeeList {
         return data
     }
 
-    fun insertData(context: Context) {
+    private fun insertData(context: Context) {
         val eTable = DBConnection().buildDB(context)
         val eDao = eTable.employeeDao()
 
@@ -122,14 +199,14 @@ class EmployeeList {
         }
     }
 
-    fun getEmployeeCount(context: Context): Int {
+    private fun getEmployeeCount(context: Context): Int {
         val employeeTable = DBConnection().buildDB(context)
         val empDao = employeeTable.employeeDao()
 
         return empDao.getTableEntries()
     }
 
-    fun pullEmployeeData(context: Context): List<Employee> {
+    private fun pullEmployeeData(context: Context): List<Employee> {
         val employeeTable = DBConnection().buildDB(context)
         val empDao = employeeTable.employeeDao()
 
