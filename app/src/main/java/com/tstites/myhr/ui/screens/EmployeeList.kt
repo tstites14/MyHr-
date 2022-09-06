@@ -117,15 +117,16 @@ class EmployeeList {
                                 horizontalAlignment = Alignment.CenterHorizontally) {
                                 val searchField = remember { mutableStateOf("")}
 
+                                //Reset data to original state before starting a new search
+                                data.clear()
+                                data.addAll(originalData)
+
                                 TextField(modifier = Modifier.padding(8.dp),
                                     placeholder = { Text("Search") },
                                     value = searchField.value,
                                     onValueChange = { searchField.value = it })
                                 Button(modifier = Modifier.fillMaxWidth(),
                                     onClick =  {
-                                        data.clear()
-                                        data.addAll(originalData)
-
                                         val resultData = searchDB(searchField.value, data)
 
                                         if (resultData.isNotEmpty()) {
@@ -243,11 +244,12 @@ class EmployeeList {
                 "Information Technology", "Junior Software Engineer", 100)
             val e2: Employee = Employee(2, "James Phillips", "432 Sample Ave", "Kissimmee", "FL",
                 "Information Technology", "Software Engineer", 101)
-            //val e3: Employee
+            val e3: Employee = Employee(3, "Sophia Wright", "641 QA Lane", "Orlando", "FL",
+                "Marketing", "Junior Social Media Manager", 102)
             //val e4: Employee
             //val e5: Employee
 
-            eDao.insertNewEmployee(e1, e2)
+            eDao.insertNewEmployee(e1, e2, e3)
         }
     }
 
