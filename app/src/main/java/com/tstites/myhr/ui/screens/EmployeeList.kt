@@ -21,10 +21,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.tstites.myhr.R
 import com.tstites.myhr.db.DBConnection
 import com.tstites.myhr.obj.Employee
 import kotlinx.coroutines.runBlocking
@@ -84,8 +86,9 @@ class EmployeeList {
                         filterAlert.value = true
                         searchAlert.value = false
                     }) {
-                        Icon(Icons.Outlined.Settings, "Filter search",
-                            tint = Color.White)
+                        Icon(
+                            painterResource(id = R.drawable.ic_outline_filter),
+                            "Filter search", tint = Color.White)
                     }
                     IconButton(onClick = {
                         filterAlert.value = false
@@ -169,6 +172,12 @@ class EmployeeList {
         val navController = rememberNavController()
 
         EmployeeListLayout(navController = navController)
+    }
+
+    private fun searchDB(term: String, data: ArrayList<Employee>) {
+        val results = ArrayList<Employee>()
+
+
     }
 
     private fun setupDB(context: Context): List<Employee> {
