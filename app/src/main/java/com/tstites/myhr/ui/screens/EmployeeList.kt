@@ -1,6 +1,5 @@
 package com.tstites.myhr.ui.screens
 
-import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,12 +11,10 @@ import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -47,7 +44,7 @@ class EmployeeList {
         val data = remember { mutableStateListOf<Employee>() }
         runBlocking {
             if (originalData.isEmpty()) {
-                originalData.addAll(setupDB(context,dbConnection))
+                originalData.addAll(setupDB(dbConnection))
                 data.addAll(originalData)
             }
         }
@@ -176,7 +173,8 @@ class EmployeeList {
                                     onValueChange = { departmentField.value = it })
                                 Button(modifier = Modifier.fillMaxWidth(),
                                     onClick = {
-                                        val resultData = filterDB(listOf(departmentField.value, titleField.value), data)
+                                        val resultData = filterDB(
+                                            listOf(departmentField.value, titleField.value), data)
 
                                         if (resultData.isNotEmpty()) {
                                             data.clear()
@@ -255,26 +253,26 @@ class EmployeeList {
             emptyList()
     }
 
-    private fun setupDB(context: Context, dbConnection: AppDatabase): List<Employee> {
-        if (getEmployeeCount(context, dbConnection) == 0) {
-            insertData(context, dbConnection)
+    private fun setupDB(dbConnection: AppDatabase): List<Employee> {
+        if (getEmployeeCount(dbConnection) == 0) {
+            insertData(dbConnection)
         }
 
-        val data: ArrayList<Employee> = ArrayList(pullEmployeeData(context, dbConnection))
+        val data: ArrayList<Employee> = ArrayList(pullEmployeeData(dbConnection))
         Log.i("TEST", data.toString())
 
         return data
     }
 
-    private fun insertData(context: Context, dbConnection: AppDatabase) {
+    private fun insertData(dbConnection: AppDatabase) {
         val eDao = dbConnection.employeeDao()
 
         if (eDao.getTableEntries() == 0) {
-            val e1: Employee = Employee(1, "John Doe", "12 Test Ave", "Orlando", "FL",
+            val e1 = Employee(1, "John Doe", "12 Test Ave", "Orlando", "FL",
                 "Information Technology", "Junior Software Engineer", 100)
-            val e2: Employee = Employee(2, "James Phillips", "432 Sample Ave", "Kissimmee", "FL",
+            val e2 = Employee(2, "James Phillips", "432 Sample Ave", "Kissimmee", "FL",
                 "Information Technology", "Software Engineer", 101)
-            val e3: Employee = Employee(3, "Sophia Wright", "641 QA Lane", "Orlando", "FL",
+            val e3 = Employee(3, "Sophia Wright", "641 QA Lane", "Orlando", "FL",
                 "Marketing", "Junior Social Media Manager", 102)
             //val e4: Employee
             //val e5: Employee
@@ -283,13 +281,13 @@ class EmployeeList {
         }
     }
 
-    private fun getEmployeeCount(context: Context, dbConnection: AppDatabase): Int {
+    private fun getEmployeeCount(dbConnection: AppDatabase): Int {
         val empDao = dbConnection.employeeDao()
 
         return empDao.getTableEntries()
     }
 
-    private fun pullEmployeeData(context: Context, dbConnection: AppDatabase): List<Employee> {
+    private fun pullEmployeeData(dbConnection: AppDatabase): List<Employee> {
         val empDao = dbConnection.employeeDao()
 
         return empDao.getAllEmployees()
