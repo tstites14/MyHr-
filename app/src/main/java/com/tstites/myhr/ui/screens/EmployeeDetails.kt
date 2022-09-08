@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -79,7 +80,8 @@ class EmployeeDetails {
                 if (deleteButtonPressed.value) {
                     AlertDialog(onDismissRequest = { deleteButtonPressed.value = false }, buttons = {
                         Column {
-                            Text("Are you sure you would like to delete this entry?")
+                            Text("Are you sure you would like to delete this entry?",
+                                modifier = Modifier.padding(24.dp), textAlign = TextAlign.Center)
 
                             Row {
                                 Button(onClick = {
@@ -87,12 +89,12 @@ class EmployeeDetails {
                                     navController.navigate(Screens.EmployeeList.route)
 
                                     deleteButtonPressed.value = false
-                                }) {
+                                }, modifier = Modifier.fillMaxWidth(0.5f).padding(8.dp)) {
                                     Text("Confirm")
                                 }
                                 Button(onClick = {
                                     deleteButtonPressed.value = false
-                                }) {
+                                }, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
                                     Text("Dismiss")
                                 }
                             }
