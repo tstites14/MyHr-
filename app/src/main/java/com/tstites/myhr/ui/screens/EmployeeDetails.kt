@@ -9,11 +9,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.tstites.myhr.db.DBConnection
 import com.tstites.myhr.obj.Employee
+import com.tstites.myhr.obj.EmployeeDao
 import com.tstites.myhr.ui.components.CommonElements
 
 class EmployeeDetails {
@@ -28,8 +31,10 @@ class EmployeeDetails {
             employeeInfo?.getString("city") ?: "",
             employeeInfo?.getString("state") ?: "",
             employeeInfo?.getString("department") ?: "",
-            "",
+            employeeInfo?.getString("title") ?: "",
             employeeInfo?.getInt("extension") ?: 1)
+        val dbConnection = DBConnection()
+        val employeeDao = dbConnection.buildDB(LocalContext.current).employeeDao()
 
         //use mutableStateOf to force Compose to refresh itself when value changes
         val textFieldState = remember { mutableStateOf(false) }
@@ -75,7 +80,8 @@ class EmployeeDetails {
                     textFieldState.value = true
 
                     if (editButtonText.value == "Save") {
-                        /*TODO*/
+                        employeeDao.updateExistingEmployee(employee)
+                        navController.navigate(Screens.EmployeeList.route)
                     }
                     editButtonText.value = "Save"
                 }
@@ -83,7 +89,7 @@ class EmployeeDetails {
                                         modifier = Modifier
                                             .padding(16.dp)
                                             .weight(0.5f)) {
-
+                    /*TODO*/
                 }
             }
         }

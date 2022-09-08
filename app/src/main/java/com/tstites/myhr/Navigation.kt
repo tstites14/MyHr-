@@ -23,7 +23,7 @@ fun Navigation() {
             val eList = EmployeeList()
             eList.EmployeeListLayout(navController = navController)
         }
-        composable(Screens.EmployeeDetails.route + "/{id}/{name}/{address}/{city}/{state}/{department}/{extension}",
+        composable(Screens.EmployeeDetails.route + "/{id}/{name}/{address}/{city}/{state}/{department}/{title}/{extension}",
                     arguments = listOf(
                         navArgument("id") {
                             type = NavType.IntType
@@ -43,6 +43,9 @@ fun Navigation() {
                         }, navArgument("department") {
                             type = NavType.StringType
                             defaultValue = "Information Technology"
+                        }, navArgument("title") {
+                            type = NavType.StringType
+                            defaultValue = "Software Engineer"
                         }, navArgument("extension") {
                             type = NavType.StringType
                             defaultValue = "001"

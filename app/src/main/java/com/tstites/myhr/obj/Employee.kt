@@ -31,6 +31,9 @@ interface EmployeeDao {
     @Insert
     fun insertNewEmployee(vararg employee: Employee)
 
+    @Update
+    fun updateExistingEmployee(employee: Employee)
+
     @Delete
     fun deleteEmployee(employee: Employee): Int
 }

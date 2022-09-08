@@ -63,7 +63,7 @@ class EmployeeList {
                                 .padding(8.dp)
                                 .clickable {
                                     navController.navigate(Screens.EmployeeDetails.route +
-                                            "/${emp.id}/${emp.name}/${emp.address}/${emp.city}/${emp.state}/${emp.department}/${emp.phoneExtension}")
+                                            "/${emp.id}/${emp.name}/${emp.address}/${emp.city}/${emp.state}/${emp.department}/${emp.jobTitle}/${emp.phoneExtension}")
                                 }) {
                             Column {
                                 Text(
