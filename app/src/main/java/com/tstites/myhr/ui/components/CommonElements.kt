@@ -31,14 +31,14 @@ class CommonElements {
     }
     
     @Composable
-    fun DefaultTextField(text: String, placeholder: String, modifier: Modifier, state: Boolean,
+    fun DefaultTextField(text: String, placeholder: String, title: String, modifier: Modifier, state: Boolean,
                         textBoxUpdate: (currentText: String) -> Unit) {
         val textState = remember { mutableStateOf(text) }
 
         TextField(textStyle = TextStyle(fontSize = 20.sp), value = textState.value,
             onValueChange = {
                 textState.value = it
-                textBoxUpdate(textState.value) }, modifier = modifier,
+                textBoxUpdate(textState.value) }, label = { Text(title) }, modifier = modifier,
             shape = RoundedCornerShape(4.dp), enabled = state, placeholder = { Text(placeholder) })
     }
 
@@ -53,7 +53,7 @@ class CommonElements {
     @Preview
     @Composable
     fun DefaultTextFieldPreview() {
-        DefaultTextField(text = "", "Sample", modifier = Modifier.padding(4.dp), false) {
+        DefaultTextField(text = "", "Sample", "Sample Text", modifier = Modifier.padding(4.dp), false) {
 
         }
     }

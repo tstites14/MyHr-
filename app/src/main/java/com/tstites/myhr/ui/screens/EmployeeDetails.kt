@@ -48,27 +48,27 @@ class EmployeeDetails {
                     .fillMaxWidth()
                     .fillMaxHeight(0.85f), horizontalAlignment = Alignment.CenterHorizontally) {
                     elements.DefaultTextField(text = employee.name ?: "", placeholder = "Name",
-                        modifier = Modifier.padding(12.dp), textFieldState.value) {
+                        "Name", modifier = Modifier.padding(12.dp), textFieldState.value) {
                         employee.name = it
                     }
                     elements.DefaultTextField(text = employee.address ?: "", placeholder = "Address",
-                        modifier = Modifier.padding(12.dp), state = textFieldState.value) {
+                        "Address", modifier = Modifier.padding(12.dp), state = textFieldState.value) {
                         employee.address = it
                     }
                     elements.DefaultTextField(text = employee.city ?: "", placeholder = "City",
-                        modifier = Modifier.padding(12.dp), state = textFieldState.value) {
+                        "City", modifier = Modifier.padding(12.dp), state = textFieldState.value) {
                         employee.city = it
                     }
                     elements.DefaultTextField(text = employee.state ?: "", placeholder = "State",
-                        modifier = Modifier.padding(12.dp), state = textFieldState.value) {
+                        "State", modifier = Modifier.padding(12.dp), state = textFieldState.value) {
                         employee.state = it
                     }
                     elements.DefaultTextField(text = employee.department ?: "", placeholder = "Department",
-                        modifier = Modifier.padding(12.dp), state = textFieldState.value) {
+                        "Department", modifier = Modifier.padding(12.dp), state = textFieldState.value) {
                         employee.department = it
                     }
                     elements.DefaultTextField(text = employee.phoneExtension.toString(), placeholder = "Ext.",
-                        modifier = Modifier.padding(12.dp), state = textFieldState.value) {
+                        "Ext.", modifier = Modifier.padding(12.dp), state = textFieldState.value) {
                         employee.phoneExtension = it.toInt()
                     }
                 }
