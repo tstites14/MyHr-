@@ -5,13 +5,13 @@ import androidx.room.*
 @Entity
 data class Employee(
     @PrimaryKey val id: Int,
-    @ColumnInfo(name = "name") val name: String?,
-    @ColumnInfo(name = "address") val address: String?,
-    @ColumnInfo(name = "city") val city: String?,
-    @ColumnInfo(name = "state") val state: String?,
-    @ColumnInfo(name = "department") val department: String?,
-    @ColumnInfo(name = "jobTitle") val jobTitle: String?,
-    @ColumnInfo(name = "extension") val phoneExtension: Int?
+    @ColumnInfo(name = "name") var name: String?,
+    @ColumnInfo(name = "address") var address: String?,
+    @ColumnInfo(name = "city") var city: String?,
+    @ColumnInfo(name = "state") var state: String?,
+    @ColumnInfo(name = "department") var department: String?,
+    @ColumnInfo(name = "jobTitle") var jobTitle: String?,
+    @ColumnInfo(name = "extension") var phoneExtension: Int?
 )
 
 @Dao

@@ -62,7 +62,8 @@ class EmployeeList {
                                 .fillMaxWidth()
                                 .padding(8.dp)
                                 .clickable {
-                                    navController.navigate(Screens.EmployeeDetails.route)
+                                    navController.navigate(Screens.EmployeeDetails.route +
+                                            "/${emp.id}/${emp.name}/${emp.address}/${emp.city}/${emp.state}/${emp.department}/${emp.phoneExtension}")
                                 }) {
                             Column {
                                 Text(
@@ -167,6 +168,7 @@ class EmployeeList {
                                     placeholder = { Text("Job title") },
                                     value = titleField.value,
                                     onValueChange = { titleField.value = it },)
+                                /*TODO: Replace Department TextField with dropdown menu instead*/
                                 TextField(modifier = Modifier.padding(8.dp),
                                     placeholder = { Text("Department") },
                                     value = departmentField.value,
