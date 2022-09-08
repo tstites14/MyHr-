@@ -89,7 +89,8 @@ class EmployeeDetails {
                                         modifier = Modifier
                                             .padding(16.dp)
                                             .weight(0.5f)) {
-                    /*TODO*/
+                    employeeDao.deleteEmployee(employee)
+                    navController.navigate(Screens.EmployeeList.route)
                 }
             }
         }
