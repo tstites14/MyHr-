@@ -1,8 +1,11 @@
 package com.tstites.myhr.ui.screens
 
 import android.os.Bundle
-import android.util.Log
+
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Text
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -16,7 +19,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.tstites.myhr.db.DBConnection
 import com.tstites.myhr.obj.Employee
-import com.tstites.myhr.obj.EmployeeDao
 import com.tstites.myhr.ui.components.CommonElements
 
 class EmployeeDetails {
@@ -72,6 +74,31 @@ class EmployeeDetails {
             }
             Row(modifier = Modifier.fillMaxWidth()) {
                 val editButtonText = remember { mutableStateOf("Edit")}
+                val deleteButtonPressed = remember { mutableStateOf(false) }
+
+                if (deleteButtonPressed.value) {
+                    AlertDialog(onDismissRequest = { deleteButtonPressed.value = false }, buttons = {
+                        Column {
+                            Text("Are you sure you would like to delete this entry?")
+
+                            Row {
+                                Button(onClick = {
+                                    employeeDao.deleteEmployee(employee)
+                                    navController.navigate(Screens.EmployeeList.route)
+
+                                    deleteButtonPressed.value = false
+                                }) {
+                                    Text("Confirm")
+                                }
+                                Button(onClick = {
+                                    deleteButtonPressed.value = false
+                                }) {
+                                    Text("Dismiss")
+                                }
+                            }
+                        }
+                    })
+                }
 
                 elements.DefaultButton(text = editButtonText.value,
                                         modifier = Modifier
@@ -89,8 +116,7 @@ class EmployeeDetails {
                                         modifier = Modifier
                                             .padding(16.dp)
                                             .weight(0.5f)) {
-                    employeeDao.deleteEmployee(employee)
-                    navController.navigate(Screens.EmployeeList.route)
+                    deleteButtonPressed.value = true
                 }
             }
         }
