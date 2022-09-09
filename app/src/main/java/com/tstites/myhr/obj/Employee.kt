@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Entity
 data class Employee(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "name") var name: String?,
     @ColumnInfo(name = "address") var address: String?,
     @ColumnInfo(name = "city") var city: String?,

@@ -9,6 +9,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
@@ -62,8 +64,10 @@ class EmployeeList {
                                 .fillMaxWidth()
                                 .padding(8.dp)
                                 .clickable {
-                                    navController.navigate(Screens.EmployeeDetails.route +
-                                            "/${emp.id}/${emp.name}/${emp.address}/${emp.city}/${emp.state}/${emp.department}/${emp.jobTitle}/${emp.phoneExtension}")
+                                    navController.navigate(
+                                        Screens.EmployeeDetails.route +
+                                                "/${emp.id}/${emp.name}/${emp.address}/${emp.city}/${emp.state}/${emp.department}/${emp.jobTitle}/${emp.phoneExtension}"
+                                    )
                                 }) {
                             Column {
                                 Text(
@@ -89,23 +93,27 @@ class EmployeeList {
                     val filterAlert = remember { mutableStateOf(false) }
                     val searchAlert = remember { mutableStateOf(false) }
 
-                    BottomNavigationItem(icon = { Icon(
-                        painterResource(id = R.drawable.ic_outline_filter),
-                        "Filter search", tint = Color.White) }, onClick = {
-                        filterAlert.value = true
-                        searchAlert.value = false
+                    BottomNavigationItem(icon = { Icon(Icons.Outlined.Refresh,
+                        "Refresh Data", tint = Color.White) },
+                        onClick = {
+                            data.clear()
+                            data.addAll(originalData)
+                    }, selected = false)
+                    BottomNavigationItem(icon = { Icon(Icons.Outlined.Add,
+                        "Add New Employee", tint = Color.White) }, onClick = {
+                         navController.navigate(Screens.EmployeeNew.route)
                     }, selected = false)
                     BottomNavigationItem(icon = { Icon(Icons.Outlined.Search,
                         "Search", tint = Color.White) }, onClick = {
                         filterAlert.value = false
                         searchAlert.value = true
                     }, selected = false)
-                    BottomNavigationItem(icon = { Icon(Icons.Outlined.Refresh,
-                        "Refresh Data", tint = Color.White) },
-                        onClick = {
-                            data.clear()
-                            data.addAll(originalData)
-                        }, selected = false)
+                    BottomNavigationItem(icon = { Icon(
+                        painterResource(id = R.drawable.ic_outline_filter),
+                        "Filter search", tint = Color.White) }, onClick = {
+                        filterAlert.value = true
+                        searchAlert.value = false
+                    }, selected = false)
 
                     //If the search button is pressed open the search dialog box
                     if (searchAlert.value) {

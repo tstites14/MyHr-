@@ -6,10 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.tstites.myhr.ui.screens.EmployeeDetails
-import com.tstites.myhr.ui.screens.EmployeeList
-import com.tstites.myhr.ui.screens.HomeScreen
-import com.tstites.myhr.ui.screens.Screens
+import com.tstites.myhr.ui.screens.*
 
 @Composable
 fun Navigation() {
@@ -22,6 +19,10 @@ fun Navigation() {
         composable(Screens.EmployeeList.route) {
             val eList = EmployeeList()
             eList.EmployeeListLayout(navController = navController)
+        }
+        composable(Screens.EmployeeNew.route) {
+            val eNew = EmployeeNew()
+            eNew.EmployeeNewLayout(navController = navController)
         }
         composable(Screens.EmployeeDetails.route + "/{id}/{name}/{address}/{city}/{state}/{department}/{title}/{extension}",
                     arguments = listOf(
