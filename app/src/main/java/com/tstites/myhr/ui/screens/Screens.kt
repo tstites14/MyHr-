@@ -1,5 +1,7 @@
 package com.tstites.myhr.ui.screens
 
+/*The Screens class provides a routing table for the app to reference when a request to navigate
+* to a different page*/
 sealed class Screens(val route: String) {
     object HomeScreen : Screens("home_screen")
 

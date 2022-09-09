@@ -1,6 +1,5 @@
 package com.tstites.myhr.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,7 +9,6 @@ import androidx.compose.material.*
 import androidx.compose.material.SnackbarDefaults.backgroundColor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
-import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
@@ -33,6 +31,7 @@ import com.tstites.myhr.R
 import com.tstites.myhr.db.AppDatabase
 import com.tstites.myhr.db.DBConnection
 import com.tstites.myhr.obj.Employee
+import com.tstites.myhr.obj.EmployeeDao
 import kotlinx.coroutines.runBlocking
 
 class EmployeeList {
@@ -40,13 +39,14 @@ class EmployeeList {
     @Composable
     fun EmployeeListLayout(navController: NavController) {
         val context = LocalContext.current
-        val dbConnection = DBConnection().buildDB(context)
+        val empDao = DBConnection().buildDB(context).employeeDao()
 
+        //Keep a copy of the original data so the database does not have to be read more than once
         val originalData = remember { mutableStateListOf<Employee>() }
         val data = remember { mutableStateListOf<Employee>() }
         runBlocking {
             if (originalData.isEmpty()) {
-                originalData.addAll(setupDB(dbConnection))
+                originalData.addAll(setupDB(empDao))
                 data.addAll(originalData)
             }
         }
@@ -56,19 +56,24 @@ class EmployeeList {
                     .fillMaxWidth()
                     .fillMaxHeight(.93f)
             ) {
+                //Perform the following operation on each item in the table
                 items(data, itemContent = { emp ->
                     Row(modifier = Modifier.fillMaxWidth()) {
+                        //A Card is essentially a fancy list item that contains its own UI
                         Card(
                             shape = RoundedCornerShape(4.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(8.dp)
                                 .clickable {
+                                    //When the employee is tapped, navigate to the details screen
+                                    //using the data from the database
                                     navController.navigate(
                                         Screens.EmployeeDetails.route +
-                                                "/${emp.id}/${emp.name}/${emp.address}/${emp.city}/${emp.state}/${emp.department}/${emp.jobTitle}/${emp.phoneExtension}"
+                                        "/${emp.id}/${emp.name}/${emp.address}/${emp.city}/${emp.state}/${emp.department}/${emp.jobTitle}/${emp.phoneExtension}"
                                     )
                                 }) {
+                            //This is the actual content of the Card
                             Column {
                                 Text(
                                     emp.name ?: "SAMPLE", style = TextStyle(
@@ -86,16 +91,24 @@ class EmployeeList {
                     }
                 })
             }
+            //Underneath the list is the bar that contains the searching, filtering, and adding buttons
             BottomAppBar(backgroundColor = MaterialTheme.colors.primarySurface,
                 contentColor = contentColorFor(backgroundColor),
                 elevation = AppBarDefaults.BottomAppBarElevation,
                 content = {
+                    /*This is where the buttons and other content lives*/
+
+                    //These determine whether the buttons are pressed. This is required because
+                    //these two buttons open a separate dialog when pressed
                     val filterAlert = remember { mutableStateOf(false) }
                     val searchAlert = remember { mutableStateOf(false) }
 
+                    //A refresh button is important because the data (but not the original data) is
+                    //permanently modified when searching/filtering
                     BottomNavigationItem(icon = { Icon(Icons.Outlined.Refresh,
                         "Refresh Data", tint = Color.White) },
                         onClick = {
+                            //Replace the modified data with the copy of the original data
                             data.clear()
                             data.addAll(originalData)
                     }, selected = false)
@@ -105,6 +118,8 @@ class EmployeeList {
                     }, selected = false)
                     BottomNavigationItem(icon = { Icon(Icons.Outlined.Search,
                         "Search", tint = Color.White) }, onClick = {
+                        //On clicking, the appropriate boolean is set, and this triggers the dialog
+                        //box to open
                         filterAlert.value = false
                         searchAlert.value = true
                     }, selected = false)
@@ -121,6 +136,8 @@ class EmployeeList {
                             filterAlert.value = false
                             searchAlert.value = false
                         }, buttons = {
+                            /*The "buttons" parameter is where the UI for the alert box goes. It
+                            * does not have to only be buttons*/
                             Column(
                                 modifier = Modifier.padding(8.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally) {
@@ -143,12 +160,15 @@ class EmployeeList {
                                             data.addAll(resultData)
                                         }
 
+                                        //Set the value to false again upon exit to prevent the app
+                                        //from getting confused and possibly crashing
                                         searchAlert.value = false
                                     }) {
                                     Text("Search")
                                 }
                                 Button(modifier = Modifier.fillMaxWidth(),
                                     onClick =  {
+                                        //Does nothing but close the dialog without changing anything
                                         filterAlert.value = false
                                         searchAlert.value = false
                                 }) {
@@ -172,11 +192,13 @@ class EmployeeList {
                                 data.clear()
                                 data.addAll(originalData)
 
+                                //Job title textbox
                                 TextField(modifier = Modifier.padding(8.dp),
                                     placeholder = { Text("Job title") },
                                     value = titleField.value,
                                     onValueChange = { titleField.value = it },)
-                                /*TODO: Replace Department TextField with dropdown menu instead*/
+
+                                //Department textbox
                                 TextField(modifier = Modifier.padding(8.dp),
                                     placeholder = { Text("Department") },
                                     value = departmentField.value,
@@ -221,8 +243,9 @@ class EmployeeList {
         val results = ArrayList<Employee>()
 
         data.forEach {
-            //Check for phone extension match
+            //The search term must not be empty/null or the app will crash
             if (term.isNotEmpty()) {
+                //Check for phone extension match
                 if (term.isDigitsOnly() && term.toInt() == it.phoneExtension) {
                     results.add(it)
                 } else if (it.name?.contains(term) == true) {
@@ -235,6 +258,7 @@ class EmployeeList {
             }
         }
 
+        //Only return a list if there are results to prevent the UI from disappearing when no results are returned
         return if (results.isNotEmpty())
             results.toList()
         else
@@ -263,43 +287,33 @@ class EmployeeList {
             emptyList()
     }
 
-    private fun setupDB(dbConnection: AppDatabase): List<Employee> {
-        if (getEmployeeCount(dbConnection) == 0) {
-            insertData(dbConnection)
+    private fun setupDB(empDao: EmployeeDao): List<Employee> {
+        //Only insert sample data if the database does not have any entries already
+        if (getEmployeeCount(empDao) == 0) {
+            insertData(empDao)
         }
 
-        val data: ArrayList<Employee> = ArrayList(pullEmployeeData(dbConnection))
-        Log.i("TEST", data.toString())
-
-        return data
+        return ArrayList(pullEmployeeData(empDao))
     }
 
-    private fun insertData(dbConnection: AppDatabase) {
-        val eDao = dbConnection.employeeDao()
-
-        if (eDao.getTableEntries() == 0) {
+    private fun insertData(empDao: EmployeeDao) {
+        if (empDao.getTableEntries() == 0) {
             val e1 = Employee(1, "John Doe", "12 Test Ave", "Orlando", "FL",
                 "Information Technology", "Junior Software Engineer", 100)
             val e2 = Employee(2, "James Phillips", "432 Sample Ave", "Kissimmee", "FL",
                 "Information Technology", "Software Engineer", 101)
             val e3 = Employee(3, "Sophia Wright", "641 QA Lane", "Orlando", "FL",
                 "Marketing", "Junior Social Media Manager", 102)
-            //val e4: Employee
-            //val e5: Employee
 
-            eDao.insertNewEmployee(e1, e2, e3)
+            empDao.insertNewEmployee(e1, e2, e3)
         }
     }
 
-    private fun getEmployeeCount(dbConnection: AppDatabase): Int {
-        val empDao = dbConnection.employeeDao()
-
+    private fun getEmployeeCount(empDao: EmployeeDao): Int {
         return empDao.getTableEntries()
     }
 
-    private fun pullEmployeeData(dbConnection: AppDatabase): List<Employee> {
-        val empDao = dbConnection.employeeDao()
-
+    private fun pullEmployeeData(empDao: EmployeeDao): List<Employee> {
         return empDao.getAllEmployees()
     }
 }

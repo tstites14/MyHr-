@@ -27,6 +27,7 @@ class EmployeeDetails {
     @Composable
     fun EmployeeDetailsLayout(navController: NavController, employeeInfo: Bundle?) {
         val elements = CommonElements()
+
         val employee = Employee(
             employeeInfo?.getInt("id") ?: 0,
             employeeInfo?.getString("name") ?: "",
@@ -36,10 +37,12 @@ class EmployeeDetails {
             employeeInfo?.getString("department") ?: "",
             employeeInfo?.getString("title") ?: "",
             employeeInfo?.getInt("extension") ?: 1)
+
         val dbConnection = DBConnection()
         val employeeDao = dbConnection.buildDB(LocalContext.current).employeeDao()
 
-        //use mutableStateOf to force Compose to refresh itself when value changes
+        //Use mutableStateOf to force Compose to refresh itself when value changes
+        //To prevent accidental modification, force the user to press the "Edit" button first
         val textFieldState = remember { mutableStateOf(false) }
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -78,6 +81,8 @@ class EmployeeDetails {
                 }
             }
             Row(modifier = Modifier.fillMaxWidth()) {
+                //Store whether the button has been pressed and the state of the edit button
+                //since it also is the save button
                 val editButtonText = remember { mutableStateOf("Edit")}
                 val deleteButtonPressed = remember { mutableStateOf(false) }
 
@@ -110,8 +115,10 @@ class EmployeeDetails {
                                         modifier = Modifier
                                             .padding(16.dp)
                                             .weight(0.5f)) {
+                    //Enable the textboxes to allow them to be modified
                     textFieldState.value = true
 
+                    //Perform the save function if the button has been pressed before
                     if (editButtonText.value == "Save") {
                         employeeDao.updateExistingEmployee(employee)
                         navController.navigate(Screens.EmployeeList.route)

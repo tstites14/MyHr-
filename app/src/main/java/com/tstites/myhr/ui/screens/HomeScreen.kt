@@ -21,6 +21,8 @@ import androidx.navigation.compose.rememberNavController
 class HomeScreen {
     @Composable
     fun HomeScreenLayout(navController: NavController) {
+        //This column has three IconButtons that split the screen into thirds.
+        //Each button navigates to a different portion of the application
         Column(modifier = Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center) {
             IconButton(modifier = Modifier.weight(0.33f),
@@ -54,7 +56,8 @@ class HomeScreen {
                         imageVector = Icons.Filled.Face,
                         contentDescription = "Customer Management"
                     )
-                    Text("*Coming Soon*", modifier = Modifier.fillMaxWidth(),
+                    Text("*Coming Soon*",
+                        modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
                 }
             }

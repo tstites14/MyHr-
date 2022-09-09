@@ -13,6 +13,7 @@ abstract class AppDatabase: RoomDatabase() {
 }
 class DBConnection {
     fun buildDB(context: Context): AppDatabase {
+        //Name "AppDB" is the name of the database to be built
         return Room.databaseBuilder(context, AppDatabase::class.java, "AppDB")
             .allowMainThreadQueries().build()
     }
