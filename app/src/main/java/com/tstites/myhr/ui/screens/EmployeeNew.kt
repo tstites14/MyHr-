@@ -32,7 +32,7 @@ class EmployeeNew {
         val state = remember { mutableStateOf("")}
         val department = remember { mutableStateOf("")}
         val jobTitle = remember { mutableStateOf("")}
-        val extension = remember { mutableStateOf(0)}
+        val extension = remember { mutableStateOf("")}
 
         Column(modifier = Modifier.fillMaxSize()) {
             Card {
@@ -66,9 +66,9 @@ class EmployeeNew {
                         "Job Title*", modifier = Modifier.padding(8.dp), state = true) {
                         jobTitle.value = it
                     }
-                    elements.DefaultTextFieldNum(text = extension.value.toString(), placeholder = "Ext.",
+                    elements.DefaultTextFieldNum(text = extension.value, placeholder = "Ext.",
                         "Ext.*", modifier = Modifier.padding(8.dp), state = true) {
-                        extension.value = it.toInt()
+                        extension.value = it
                     }
                 }
             }
@@ -79,7 +79,7 @@ class EmployeeNew {
                     .weight(0.5f)) {
                     val employee = Employee(
                         0, name.value, address.value, city.value, state.value, department.value,
-                        jobTitle.value, extension.value)
+                        jobTitle.value, extension.value.toInt())
 
                     val empDao = DBConnection().buildDB(context).employeeDao()
                     empDao.insertNewEmployee(employee)
