@@ -77,17 +77,25 @@ class EmployeeNew {
                 elements.DefaultButton(text = "Save", modifier = Modifier
                     .padding(8.dp)
                     .weight(0.5f)) {
-                    val employee = Employee(
-                        0, name.value, address.value, city.value, state.value, department.value,
-                        jobTitle.value, extension.value.toInt())
+                    if (name.value.isNotBlank() && address.value.isNotBlank()
+                        && city.value.isNotBlank() && state.value.isNotBlank()
+                        && department.value.isNotBlank() && jobTitle.value.isNotBlank()
+                        && extension.value.isNotBlank()) {
+                        //Create new Employee based on data in TextFields
+                        val employee = Employee(
+                            0, name.value, address.value, city.value, state.value, department.value,
+                            jobTitle.value, extension.value.toInt())
 
-                    val empDao = DBConnection().buildDB(context).employeeDao()
-                    empDao.insertNewEmployee(employee)
-                    navController.navigate(Screens.EmployeeList.route)
+                        val empDao = DBConnection().buildDB(context).employeeDao()
+                        empDao.insertNewEmployee(employee)
+                        //After data is inserted into database, return to EmployeeList
+                        navController.navigate(Screens.EmployeeList.route)
+                    }
                 }
                 elements.DefaultButton(text = "Discard", modifier = Modifier
                     .padding(8.dp)
                     .weight(0.5f)) {
+                    //Nothing needs to be done so data may be discarded by navigating away
                     navController.navigate(Screens.EmployeeList.route)
                 }
             }
