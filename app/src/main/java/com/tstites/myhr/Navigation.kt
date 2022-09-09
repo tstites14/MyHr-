@@ -48,8 +48,8 @@ fun Navigation() {
                             type = NavType.StringType
                             defaultValue = "Software Engineer"
                         }, navArgument("extension") {
-                            type = NavType.StringType
-                            defaultValue = "001"
+                            type = NavType.IntType
+                            defaultValue = 1
                         }
                     )) {
             val eDetails = EmployeeDetails()
