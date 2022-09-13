@@ -39,7 +39,9 @@ class HomeScreen {
                 }
             }
             IconButton(modifier = Modifier.weight(0.33f),
-                onClick = { Log.i("test","2") }) {
+                onClick = {
+                    navController.navigate(Screens.ProjectList.route)
+                }) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.8f),
                         imageVector = Icons.Filled.PlayArrow,

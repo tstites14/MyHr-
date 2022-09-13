@@ -19,6 +19,7 @@ fun Navigation() {
             val home = HomeScreen()
             home.HomeScreenLayout(navController = navController)
         }
+
         composable(Screens.EmployeeList.route) {
             val eList = EmployeeList()
             eList.EmployeeListLayout(navController = navController)
@@ -60,6 +61,11 @@ fun Navigation() {
             )) {
             val eDetails = EmployeeDetails()
             eDetails.EmployeeDetailsLayout(navController = navController, it.arguments)
+        }
+
+        composable(Screens.ProjectList.route) {
+            val pList = ProjectList()
+            pList.ProjectListLayout(navController = navController)
         }
     }
 }
