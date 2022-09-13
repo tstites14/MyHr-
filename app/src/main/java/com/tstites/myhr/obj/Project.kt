@@ -39,7 +39,7 @@ interface ProjectDao {
     fun updateExistingProject(project: Project)
 
     @Delete
-    fun deleteProject(projectID: Int): Int
+    fun deleteProject(project: Project): Int
 }
 
 @Dao
