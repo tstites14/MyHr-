@@ -5,8 +5,8 @@ import androidx.room.*
 @Entity
 data class Project (
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    @ColumnInfo(name = "title") val title: String?,
-    @ColumnInfo(name = "progress") val progress: Float = 0f,
+    @ColumnInfo(name = "title") var title: String?,
+    @ColumnInfo(name = "progress") var progress: Float = 0f,
 )
 
 @Entity(primaryKeys = ["employeeID", "projectID"] )
