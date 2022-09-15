@@ -47,7 +47,7 @@ class HomeScreen {
                         imageVector = Icons.Filled.PlayArrow,
                         contentDescription = "Project Management"
                     )
-                    Text("*Coming Soon*", modifier = Modifier.fillMaxWidth(),
+                    Text("Project Management", modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
                 }
             }

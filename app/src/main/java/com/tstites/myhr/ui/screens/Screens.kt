@@ -10,4 +10,5 @@ sealed class Screens(val route: String) {
     object EmployeeNew: Screens("employee_new")
 
     object ProjectList: Screens("project_list")
+    object ProjectDetails: Screens("project_details")
 }
