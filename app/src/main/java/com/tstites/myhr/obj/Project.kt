@@ -46,13 +46,16 @@ interface ProjectDao {
 @Dao
 interface ProjectEmployeeDao {
     @Query("SELECT * FROM ProjectEmployee")
-    fun getAllProjectEmployees(): ProjectEmployee
+    fun getAllProjectEmployees(): List<ProjectEmployee>
 
     @Query("SELECT * FROM ProjectEmployee WHERE projectID = :projectID")
     fun getEmployeeIDsByProject(projectID: Int): List<ProjectEmployee>
 
     @Query("SELECT * FROM ProjectEmployee WHERE employeeID = :employeeID")
     fun getProjectIDsByEmployee(employeeID: Int): List<ProjectEmployee>
+
+    @Query("SELECT COUNT(*) FROM ProjectEmployee")
+    fun getTableEntries(): Int
 
     @Insert
     fun insertNewProjectEmployee(vararg projectEmployee: ProjectEmployee)
