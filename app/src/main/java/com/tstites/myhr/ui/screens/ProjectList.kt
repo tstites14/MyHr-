@@ -56,7 +56,8 @@ class ProjectList {
                                 .fillMaxWidth()
                                 .padding(8.dp)
                                 .clickable {
-                                    //TODO: INSERT NAV HERE
+                                    navController.navigate(Screens.ProjectDetails.route +
+                                        "/${project.id}/${project.title}/${project.progress}/")
                                 }
                         ) {
                             Column {
