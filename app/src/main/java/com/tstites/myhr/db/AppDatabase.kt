@@ -10,6 +10,7 @@ import com.tstites.myhr.obj.*
 abstract class AppDatabase: RoomDatabase() {
     abstract fun employeeDao(): EmployeeDao
     abstract fun projectDao(): ProjectDao
+    abstract  fun projectEmployeeDao(): ProjectEmployeeDao
 }
 class DBConnection {
     fun buildDB(context: Context): AppDatabase {
