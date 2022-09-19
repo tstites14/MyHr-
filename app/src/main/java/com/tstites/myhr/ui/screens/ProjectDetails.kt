@@ -54,7 +54,7 @@ class ProjectDetails {
             if (projectEmployeeDao.getTableEntries() == 0)
                 insertData(projectEmployeeDao)
             if (projectEmployees.isEmpty())
-                projectEmployees.addAll(projectEmployeeDao.getAllProjectEmployees())
+                projectEmployees.addAll(projectEmployeeDao.getEmployeeIDsByProject(project.id))
         }
 
         Column(modifier = Modifier.fillMaxSize()) {
