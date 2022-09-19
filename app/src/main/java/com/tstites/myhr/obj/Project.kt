@@ -12,7 +12,8 @@ data class Project (
 @Entity(primaryKeys = ["employeeID", "projectID"] )
 data class ProjectEmployee (
     val employeeID: Int,
-    val projectID: Int
+    val projectID: Int,
+    val currentProgress: Float
 )
 
 @Dao
