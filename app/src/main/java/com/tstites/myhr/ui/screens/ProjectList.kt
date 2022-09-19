@@ -18,9 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.tstites.myhr.db.DBConnection
-import com.tstites.myhr.obj.Project
-import com.tstites.myhr.obj.ProjectDao
-import com.tstites.myhr.obj.ProjectEmployeeDao
+import com.tstites.myhr.obj.*
 import kotlinx.coroutines.runBlocking
 
 class ProjectList {
@@ -33,6 +31,7 @@ class ProjectList {
         val dbConnection = DBConnection().buildDB(context)
         val projectDao = dbConnection.projectDao()
         val projectEmployeeDao = dbConnection.projectEmployeeDao()
+        val employeeDao = dbConnection.employeeDao()
 
         //Keep a copy of the original data so the database does not have to be read more than once
         val originalData = remember { mutableStateListOf<Project>() }
@@ -40,7 +39,7 @@ class ProjectList {
 
         runBlocking {
             if (originalData.isEmpty()) {
-                originalData.addAll(setupDB(projectDao, projectEmployeeDao))
+                originalData.addAll(setupDB(projectDao, projectEmployeeDao, employeeDao))
                 data.addAll(originalData)
             }
         }
@@ -96,10 +95,11 @@ class ProjectList {
         ProjectListLayout(navController = nav)
     }
 
-    private fun setupDB(projectDao: ProjectDao, projectEmployeeDao: ProjectEmployeeDao): List<Project> {
+    private fun setupDB(projectDao: ProjectDao,
+                        projectEmployeeDao: ProjectEmployeeDao, employeeDao: EmployeeDao): List<Project> {
         //Only insert sample data if the database does not have any entries already
         if (projectDao.getTableEntries() == 0) {
-            insertData(projectDao)
+            insertData(projectDao, projectEmployeeDao, employeeDao)
         }
 
         //Calculate and update each project's average to reflect the actual value
@@ -113,12 +113,31 @@ class ProjectList {
         return ArrayList(projectDao.getAllProjects())
     }
 
-    private fun insertData(projectDao: ProjectDao) {
+    private fun insertData(projectDao: ProjectDao, projectEmployeeDao: ProjectEmployeeDao, employeeDao: EmployeeDao) {
         if (projectDao.getTableEntries() == 0) {
             val p1 = Project(0, "MyHr+", 0f)
             val p2 = Project(0, "Docx to Pdf Converter", 0f)
 
             projectDao.insertNewProject(p1, p2)
+        }
+
+        if (projectEmployeeDao.getTableEntries() == 0) {
+            val pe1 = ProjectEmployee(1, 1, 0.33f)
+            val pe2 = ProjectEmployee(2, 1, 0.5f)
+            val pe3 = ProjectEmployee(1, 2, 0f)
+
+            projectEmployeeDao.insertNewProjectEmployee(pe1, pe2, pe3)
+        }
+
+        if (employeeDao.getTableEntries() == 0) {
+            val e1 = Employee(1, "John Doe", "12 Test Ave", "Orlando", "FL",
+                "Information Technology", "Junior Software Engineer", 100)
+            val e2 = Employee(2, "James Phillips", "432 Sample Ave", "Kissimmee", "FL",
+                "Information Technology", "Software Engineer", 101)
+            val e3 = Employee(3, "Sophia Wright", "641 QA Lane", "Orlando", "FL",
+                "Marketing", "Junior Social Media Manager", 102)
+
+            employeeDao.insertNewEmployee(e1, e2, e3)
         }
     }
 }
