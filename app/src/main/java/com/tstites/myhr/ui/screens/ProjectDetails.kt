@@ -24,6 +24,7 @@ import com.tstites.myhr.db.DBConnection
 import com.tstites.myhr.obj.*
 import com.tstites.myhr.ui.components.CommonElements
 import kotlinx.coroutines.runBlocking
+import kotlin.math.roundToInt
 
 class ProjectDetails {
 
@@ -60,7 +61,7 @@ class ProjectDetails {
         Column(modifier = Modifier.fillMaxSize()) {
             //This Card contains the title and average progress
             Card (modifier = Modifier
-                .weight(0.30f)
+                .weight(0.35f)
                 .padding(12.dp)) {
                 Column(modifier = Modifier
                     .fillMaxWidth()
@@ -80,7 +81,8 @@ class ProjectDetails {
                             .padding(16.dp)
                             .height(16.dp)
                             .fillMaxWidth())
-                    Text("${project.progress}%")
+                    //Shows the percentage as a number rounded to the nearest percent
+                    Text("${(project.progress * 100).roundToInt()}%")
                 }
             }
 
