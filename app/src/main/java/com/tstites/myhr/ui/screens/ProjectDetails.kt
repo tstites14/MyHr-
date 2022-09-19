@@ -52,7 +52,7 @@ class ProjectDetails {
         runBlocking {
             //Insert data into the database if the table is empty
             if (projectEmployeeDao.getTableEntries() == 0)
-                insertData(projectEmployeeDao)
+                insertData(projectEmployeeDao, employeeDao)
             if (projectEmployees.isEmpty())
                 projectEmployees.addAll(projectEmployeeDao.getEmployeeIDsByProject(project.id))
         }
@@ -197,12 +197,24 @@ class ProjectDetails {
     }
 
     //Insert data into the ProjectEmployee table
-    private fun insertData(dao: ProjectEmployeeDao) {
-        if (dao.getTableEntries() == 0) {
+    private fun insertData(projectEmployeeDao: ProjectEmployeeDao, employeeDao: EmployeeDao) {
+        if (projectEmployeeDao.getTableEntries() == 0) {
             val pe1 = ProjectEmployee(1, 1, 0.33f)
             val pe2 = ProjectEmployee(2, 1, 0.5f)
+            val pe3 = ProjectEmployee(1, 2, 0f)
 
-            dao.insertNewProjectEmployee(pe1, pe2)
+            projectEmployeeDao.insertNewProjectEmployee(pe1, pe2, pe3)
+        }
+
+        if (employeeDao.getTableEntries() == 0) {
+            val e1 = Employee(1, "John Doe", "12 Test Ave", "Orlando", "FL",
+                "Information Technology", "Junior Software Engineer", 100)
+            val e2 = Employee(2, "James Phillips", "432 Sample Ave", "Kissimmee", "FL",
+                "Information Technology", "Software Engineer", 101)
+            val e3 = Employee(3, "Sophia Wright", "641 QA Lane", "Orlando", "FL",
+                "Marketing", "Junior Social Media Manager", 102)
+
+            employeeDao.insertNewEmployee(e1, e2, e3)
         }
     }
 
