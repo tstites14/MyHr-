@@ -30,6 +30,9 @@ interface ProjectDao {
     @Query("SELECT * FROM Project WHERE progress >= :minCompletion")
     fun getProjectByMinCompletion(minCompletion: Float): List<Project>
 
+    @Query("DELETE FROM Project WHERE id = :id")
+    fun deleteProjectByID(id: Int): Int
+
     @Query("SELECT COUNT(*) FROM Project")
     fun getTableEntries(): Int
 
@@ -53,6 +56,12 @@ interface ProjectEmployeeDao {
 
     @Query("SELECT * FROM ProjectEmployee WHERE employeeID = :employeeID")
     fun getProjectIDsByEmployee(employeeID: Int): List<ProjectEmployee>
+
+    @Query("SELECT * FROM ProjectEmployee WHERE employeeID = :employeeID AND projectID = :projectID")
+    fun getSpecificProjectEmployee(employeeID: Int, projectID: Int): ProjectEmployee
+
+    @Query("DELETE FROM ProjectEmployee WHERE employeeID = :employeeID AND projectID = :projectID")
+    fun deleteProjectEmployeeByID(employeeID: Int, projectID: Int): Int
 
     @Query("SELECT AVG(currentProgress) AS 'average' FROM ProjectEmployee WHERE projectID = :projectID")
     fun getProgressAverageByProject(projectID: Int): Float

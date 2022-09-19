@@ -27,7 +27,6 @@ import kotlinx.coroutines.runBlocking
 import kotlin.math.roundToInt
 
 class ProjectDetails {
-
     @Composable
     fun ProjectDetailsLayout(navController: NavController, projectInfo: Bundle?) {
         //All the default UI elements to be inserted
@@ -41,7 +40,7 @@ class ProjectDetails {
         )
 
         //Keep a list of current employees working on the project
-        val projectEmployees = remember { mutableStateListOf<ProjectEmployee>() }
+        val data = remember { mutableStateListOf<ProjectEmployee>() }
 
         //Contains all the DAO objects used by the page
         val dbConnection = DBConnection().buildDB(LocalContext.current)
@@ -54,8 +53,8 @@ class ProjectDetails {
             //Insert data into the database if the table is empty
             if (projectEmployeeDao.getTableEntries() == 0)
                 insertData(projectEmployeeDao, employeeDao)
-            if (projectEmployees.isEmpty())
-                projectEmployees.addAll(projectEmployeeDao.getEmployeeIDsByProject(project.id))
+            if (data.isEmpty())
+                data.addAll(projectEmployeeDao.getEmployeeIDsByProject(project.id))
         }
 
         Column(modifier = Modifier.fillMaxSize()) {
@@ -94,11 +93,12 @@ class ProjectDetails {
                     .fillMaxWidth()
                     .padding(8.dp)) {
                     //Get data to show in list
-                    val employees: List<Employee> = projectEmployeesToEmployees(projectEmployees, employeeDao)
+                    val employees: List<Employee> = dataToEmployees(data, employeeDao)
 
                     //Start the employee list
                     for (i in 0 until employees.count()) {
-                        EmployeeListItem(employee = employees[i], progress = projectEmployees[i].currentProgress)
+                        EmployeeListItem(employee = employees[i], projectEmployeeDao,
+                            progress = data[i].currentProgress, project, navController)
                     }
                 }
             }
@@ -137,7 +137,8 @@ class ProjectDetails {
 
                             Row {
                                 Button(onClick = {
-                                    //TODO
+                                    projectDao.deleteProject(project)
+                                    navController.navigate(Screens.ProjectList.route)
                                 }, modifier = Modifier
                                     .fillMaxWidth(0.5f)
                                     .padding(8.dp)) {
@@ -160,7 +161,7 @@ class ProjectDetails {
     }
 
     @Composable
-    fun EmployeeListItem(employee: Employee, progress: Float) {
+    fun EmployeeListItem(employee: Employee, dao: ProjectEmployeeDao, progress: Float, project: Project, navController: NavController) {
         Row(modifier = Modifier
             .height(60.dp)
             .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp),
@@ -177,7 +178,12 @@ class ProjectDetails {
                 .height(12.dp)
                 .padding(end = 16.dp))
 
-            IconButton(onClick = { /*TODO*/ },
+            IconButton(onClick = {
+                    dao.deleteProjectEmployeeByID(employee.id, project.id)
+
+                    navController.navigate(Screens.ProjectDetails.route +
+                        "/${project.id}/${project.title}/${project.progress}/")
+                },
                 modifier = Modifier
                     .drawWithContent { drawContent() }
                     .padding(4.dp)
@@ -187,11 +193,11 @@ class ProjectDetails {
         }
     }
 
-    private fun projectEmployeesToEmployees(projectEmployees: List<ProjectEmployee>,
+    private fun dataToEmployees(data: List<ProjectEmployee>,
                                             dao: EmployeeDao): List<Employee> {
         val employees: ArrayList<Employee> = arrayListOf()
 
-        for (projectEmployee in projectEmployees) {
+        for (projectEmployee in data) {
             employees.add(dao.getEmployeeById(projectEmployee.employeeID))
         }
 
@@ -230,9 +236,11 @@ class ProjectDetails {
     @Preview
     @Composable
     fun EmployeeListItemPreview() {
+        val navController = rememberNavController()
         val emp = Employee(1, "John Doe", null, null, null, 
             null, null, 111)
         
-        EmployeeListItem(employee = emp, 0.5f)
+        EmployeeListItem(employee = emp, DBConnection().buildDB(LocalContext.current).projectEmployeeDao(),.5f,
+            Project(0, "SAMPLE", 0f), navController)
     }
 }
