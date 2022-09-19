@@ -54,6 +54,9 @@ interface ProjectEmployeeDao {
     @Query("SELECT * FROM ProjectEmployee WHERE employeeID = :employeeID")
     fun getProjectIDsByEmployee(employeeID: Int): List<ProjectEmployee>
 
+    @Query("SELECT AVG(currentProgress) AS 'average' FROM ProjectEmployee WHERE projectID = :projectID")
+    fun getProgressAverageByProject(projectID: Int): Float
+
     @Query("SELECT COUNT(*) FROM ProjectEmployee")
     fun getTableEntries(): Int
 

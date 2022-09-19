@@ -20,6 +20,7 @@ import androidx.navigation.compose.rememberNavController
 import com.tstites.myhr.db.DBConnection
 import com.tstites.myhr.obj.Project
 import com.tstites.myhr.obj.ProjectDao
+import com.tstites.myhr.obj.ProjectEmployeeDao
 import kotlinx.coroutines.runBlocking
 
 class ProjectList {
@@ -27,7 +28,11 @@ class ProjectList {
     @Composable
     fun ProjectListLayout(navController: NavController) {
         val context = LocalContext.current
-        val projectDao = DBConnection().buildDB(context).projectDao()
+
+        //Database connections
+        val dbConnection = DBConnection().buildDB(context)
+        val projectDao = dbConnection.projectDao()
+        val projectEmployeeDao = dbConnection.projectEmployeeDao()
 
         //Keep a copy of the original data so the database does not have to be read more than once
         val originalData = remember { mutableStateListOf<Project>() }
@@ -35,7 +40,7 @@ class ProjectList {
 
         runBlocking {
             if (originalData.isEmpty()) {
-                originalData.addAll(setupDB(projectDao = projectDao))
+                originalData.addAll(setupDB(projectDao, projectEmployeeDao))
                 data.addAll(originalData)
             }
         }
@@ -91,10 +96,18 @@ class ProjectList {
         ProjectListLayout(navController = nav)
     }
 
-    private fun setupDB(projectDao: ProjectDao): List<Project> {
+    private fun setupDB(projectDao: ProjectDao, projectEmployeeDao: ProjectEmployeeDao): List<Project> {
         //Only insert sample data if the database does not have any entries already
         if (projectDao.getTableEntries() == 0) {
             insertData(projectDao)
+        }
+
+        //Calculate and update each project's average to reflect the actual value
+        projectDao.getAllProjects().forEach {
+            val avg = projectEmployeeDao.getProgressAverageByProject(it.id)
+            it.progress = avg
+
+            projectDao.updateExistingProject(it)
         }
 
         return ArrayList(projectDao.getAllProjects())
@@ -102,7 +115,7 @@ class ProjectList {
 
     private fun insertData(projectDao: ProjectDao) {
         if (projectDao.getTableEntries() == 0) {
-            val p1 = Project(0, "MyHr+", 0.33f)
+            val p1 = Project(0, "MyHr+", 0f)
             val p2 = Project(0, "Docx to Pdf Converter", 0f)
 
             projectDao.insertNewProject(p1, p2)
