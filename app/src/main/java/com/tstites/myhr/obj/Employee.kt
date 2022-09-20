@@ -36,6 +36,9 @@ interface EmployeeDao {
     @Query("SELECT * FROM Employee WHERE department = :department")
     fun getEmployeesFromDepartment(department: String): List<Employee>
 
+    @Query("SELECT * FROM Employee WHERE name = :name")
+    fun getEmployeeByName(name: String): Employee
+
     @Query("SELECT COUNT(*) FROM Employee")
     fun getTableEntries(): Int
 

@@ -1,9 +1,11 @@
 package com.tstites.myhr.ui.screens
 
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
@@ -12,6 +14,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Red
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -24,6 +29,7 @@ import com.tstites.myhr.db.DBConnection
 import com.tstites.myhr.obj.*
 import com.tstites.myhr.ui.components.CommonElements
 import kotlinx.coroutines.runBlocking
+import java.lang.Exception
 import kotlin.math.roundToInt
 
 class ProjectDetails {
@@ -91,7 +97,8 @@ class ProjectDetails {
                 .padding(12.dp)) {
                 Column(modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp)) {
+                    .padding(8.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally) {
                     //Get data to show in list
                     val employees: List<Employee> = dataToEmployees(data, employeeDao)
 
@@ -99,6 +106,108 @@ class ProjectDetails {
                     for (i in 0 until employees.count()) {
                         EmployeeListItem(employee = employees[i], projectEmployeeDao,
                             progress = data[i].currentProgress, project, navController)
+                    }
+
+                    //Add a button to add a new employee to the list
+                    val addPressed = remember { mutableStateOf(false) }
+                    val noErrors = remember { mutableStateOf(true) }
+                    val searchName = remember { mutableStateOf("") }
+                    val errorMessage = remember { mutableStateOf("") }
+                    val errorColor = remember { mutableStateOf(White)}
+
+                    if (addPressed.value) {
+                        AlertDialog(modifier = Modifier.height(175.dp),
+                            onDismissRequest = {
+                                addPressed.value = false
+                                noErrors.value = true
+                                errorColor.value = White
+                                searchName.value = ""
+                                errorMessage.value = ""
+                            }, buttons = {
+                                Column(modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally) {
+                                    elements.DefaultTextField(
+                                        text = searchName.value,
+                                        placeholder = "Name",
+                                        title = "Name",
+                                        modifier = Modifier.padding(8.dp),
+                                        state = true) {
+                                        searchName.value = it
+                                    }
+
+                                    //Error text when the name is not found
+                                    Text(errorMessage.value,
+                                        modifier = Modifier
+                                            .padding(4.dp)
+                                            .fillMaxWidth(),
+                                        textAlign = TextAlign.Center,
+                                        color = errorColor.value,
+                                        style = TextStyle(fontSize = 16.sp))
+
+                                    if (!noErrors.value) {
+                                        errorColor.value = Red
+                                    }
+
+                                    Row(modifier = Modifier.fillMaxWidth()) {
+                                        Button(onClick = {
+                                            try {
+                                                val employeeFound = employeeDao.getEmployeeByName(searchName.value)
+
+                                                /*Technically Employee is a non-nullable type
+                                                * but it can absolutely be null if this function returns
+                                                * nothing. I am not sure why this happens*/
+                                                if (employeeFound == null) {
+                                                    noErrors.value = false
+                                                    errorMessage.value = "This employee does not exist. Please try again."
+                                                } else if (data.any { it.employeeID == employeeFound.id }) {
+                                                    noErrors.value = false
+                                                    errorMessage.value = "This employee is already working on this project." +
+                                                            " Please try again."
+                                                } else {
+                                                    val projectEmployee = ProjectEmployee(employeeFound.id, project.id, 0f)
+                                                    data.add(projectEmployee)
+                                                    projectEmployeeDao.insertNewProjectEmployee(projectEmployee)
+
+                                                    //Close the window and return all values to their defaults
+                                                    addPressed.value = false
+                                                    noErrors.value = true
+                                                    errorColor.value = White
+                                                    searchName.value = ""
+                                                    errorMessage.value = ""
+                                                }
+                                            } catch (e: Exception) {
+                                                noErrors.value = false
+                                            }
+                                        }, modifier = Modifier
+                                            .fillMaxWidth(0.5f)
+                                            .padding(8.dp)) {
+                                            Text("Confirm")
+                                        }
+
+                                        Button(onClick = {
+                                            addPressed.value = false
+                                            noErrors.value = true
+                                            searchName.value = ""
+                                            errorColor.value = White
+                                        }, modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(8.dp)) {
+                                            Text("Dismiss")
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    }
+
+                    IconButton(onClick = {
+                            addPressed.value = true
+                        }, modifier = Modifier
+                        .padding(2.dp)) {
+                        Icon(Icons.Rounded.AddCircle, "Add new employees to the project",
+                            modifier = Modifier
+                                .size(64.dp)
+                                .fillMaxWidth())
                     }
                 }
             }
