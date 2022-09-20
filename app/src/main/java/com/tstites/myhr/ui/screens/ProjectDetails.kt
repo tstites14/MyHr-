@@ -227,7 +227,8 @@ class ProjectDetails {
 
                     //Perform the save function if the button has been pressed before
                     if (editButtonText.value == "Save") {
-                        //TODO
+                        projectDao.updateExistingProject(project)
+                        navController.navigate(Screens.ProjectList.route)
                     }
                     editButtonText.value = "Save"
                 }

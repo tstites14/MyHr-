@@ -72,6 +72,9 @@ interface ProjectEmployeeDao {
     @Insert
     fun insertNewProjectEmployee(vararg projectEmployee: ProjectEmployee)
 
+    @Update
+    fun updateExistingProjectEmployee(projectEmployee: ProjectEmployee)
+
     @Delete
     fun deleteProjectEmployee(projectEmployee: ProjectEmployee): Int
 }
