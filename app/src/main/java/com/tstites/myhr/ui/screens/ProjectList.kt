@@ -83,7 +83,7 @@ class ProjectList {
                 contentColor = contentColorFor(SnackbarDefaults.backgroundColor),
                 elevation = AppBarDefaults.BottomAppBarElevation,
                 content = {
-                    //TODO: ADD SEARCH, FILTER, AND ADD BUTTONS HERE
+
                 })
         }
     }

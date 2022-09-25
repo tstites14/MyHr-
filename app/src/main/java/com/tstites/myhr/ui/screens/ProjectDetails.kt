@@ -270,6 +270,7 @@ class ProjectDetails {
         }
     }
 
+    //This function generates a list item for each team member in the project.
     @Composable
     fun EmployeeListItem(employee: Employee, dao: ProjectEmployeeDao, progress: Float, project: Project, navController: NavController) {
         Row(modifier = Modifier
@@ -303,6 +304,7 @@ class ProjectDetails {
         }
     }
 
+    //Converts ProjectEmployees to regular Employees
     private fun dataToEmployees(data: List<ProjectEmployee>,
                                             dao: EmployeeDao): List<Employee> {
         val employees: ArrayList<Employee> = arrayListOf()
