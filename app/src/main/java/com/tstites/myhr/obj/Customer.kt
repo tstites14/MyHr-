@@ -1,5 +1,6 @@
 package com.tstites.myhr.obj
 
+import android.telephony.PhoneNumberUtils
 import androidx.room.*
 
 @Entity
@@ -9,10 +10,14 @@ data class Customer(
     @ColumnInfo(name = "address") var address: String?,
     @ColumnInfo(name = "city") var city: String?,
     @ColumnInfo(name = "state") var state: String?,
+    @ColumnInfo(name = "phone") var phone: String?
 )
 
 @Dao
 interface CustomerDao {
+    @Query("SELECT * FROM Customer")
+    fun selectAll(): List<Customer>
+
     @Query("SELECT * FROM Customer WHERE id = :id")
     fun selectById(id: Int): Customer
 
@@ -22,8 +27,11 @@ interface CustomerDao {
     @Query("SELECT * FROM Customer WHERE state = :state")
     fun selectByState(state: String): List<Customer>
 
+    @Query("SELECT COUNT(*) FROM Customer")
+    fun getTableEntries(): Int
+
     @Insert
-    fun insertNew(customer: Customer)
+    fun insertNew(vararg customer: Customer)
 
     @Delete
     fun deleteExisting(customer: Customer)
@@ -37,6 +45,9 @@ data class CustomerProject(
 
 @Dao
 interface CustomerProjectDao {
+    @Query("SELECT * FROM CustomerProject")
+    fun selectAll(): List<CustomerProject>
+
     @RewriteQueriesToDropUnusedColumns
     @Query("SELECT * FROM CustomerProject JOIN Customer ON CustomerProject.customerID = Customer.id WHERE CustomerProject.customerID = :id")
     fun selectByCustomerId(id: Int): List<Customer>
@@ -45,8 +56,11 @@ interface CustomerProjectDao {
     @Query("SELECT * FROM CustomerProject JOIN Project ON CustomerProject.projectID = Project.id WHERE CustomerProject.projectID = :id")
     fun selectByProjectId(id: Int): List<Customer>
 
+    @Query("SELECT COUNT(*) FROM CustomerProject")
+    fun getTableEntries(): Int
+
     @Insert
-    fun insertNew(customerProject: CustomerProject)
+    fun insertNew(vararg customerProject: CustomerProject)
 
     @Delete
     fun deleteExisting(customerProject: CustomerProject)
