@@ -19,6 +19,7 @@ fun Navigation() {
             val home = HomeScreen()
             home.HomeScreenLayout(navController = navController)
         }
+
         composable(Screens.EmployeeList.route) {
             val eList = EmployeeList()
             eList.EmployeeListLayout(navController = navController)
@@ -56,10 +57,30 @@ fun Navigation() {
                 }, navArgument("extension") {
                     type = NavType.IntType
                     defaultValue = 1
-                }
-            )) {
+                })) {
             val eDetails = EmployeeDetails()
             eDetails.EmployeeDetailsLayout(navController = navController, it.arguments)
+        }
+
+
+        composable(Screens.ProjectList.route) {
+            val pList = ProjectList()
+            pList.ProjectListLayout(navController = navController)
+        }
+        composable(Screens.ProjectDetails.route + "/{id}/{title}/{progress}/",
+            arguments = listOf(
+                navArgument("id") {
+                    type = NavType.IntType
+                    defaultValue = 1
+                }, navArgument("title") {
+                    type = NavType.StringType
+                    defaultValue = "MyHr+"
+                }, navArgument("progress") {
+                    type = NavType.FloatType
+                    defaultValue = 0f
+                })) {
+            val pDetails = ProjectDetails()
+            pDetails.ProjectDetailsLayout(navController = navController, projectInfo = it.arguments)
         }
     }
 }
