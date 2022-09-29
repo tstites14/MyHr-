@@ -82,5 +82,15 @@ fun Navigation() {
             val pDetails = ProjectDetails()
             pDetails.ProjectDetailsLayout(navController = navController, projectInfo = it.arguments)
         }
+
+
+        composable(Screens.CustomerList.route) {
+            val cList = CustomerList()
+            cList.CustomerListLayout(navController = navController)
+        }
+        composable(Screens.CustomerDetails.route) {
+            val cDetails = CustomerDetails()
+            cDetails.CustomerDetailsLayout(navController = navController)
+        }
     }
 }
