@@ -1,6 +1,5 @@
 package com.tstites.myhr.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
 import androidx.compose.material.Icon
@@ -26,9 +25,7 @@ class HomeScreen {
         Column(modifier = Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.Center) {
             IconButton(modifier = Modifier.weight(0.33f),
-                onClick = {
-                    navController.navigate(Screens.EmployeeList.route)
-                }) {
+                onClick = { navController.navigate(Screens.EmployeeList.route) }) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.8f),
                         imageVector = Icons.Filled.Person,
@@ -39,9 +36,7 @@ class HomeScreen {
                 }
             }
             IconButton(modifier = Modifier.weight(0.33f),
-                onClick = {
-                    navController.navigate(Screens.ProjectList.route)
-                }) {
+                onClick = { navController.navigate(Screens.ProjectList.route) }) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.8f),
                         imageVector = Icons.Filled.PlayArrow,
@@ -52,13 +47,13 @@ class HomeScreen {
                 }
             }
             IconButton(modifier = Modifier.weight(0.33f),
-                onClick = { Log.i("test","3") }) {
+                onClick = { navController.navigate(Screens.CustomerList.route) }) {
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.8f),
                         imageVector = Icons.Filled.Face,
                         contentDescription = "Customer Management"
                     )
-                    Text("*Coming Soon*",
+                    Text("Customer Management",
                         modifier = Modifier.fillMaxWidth(),
                         style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
                 }

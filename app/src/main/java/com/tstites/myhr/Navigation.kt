@@ -88,9 +88,15 @@ fun Navigation() {
             val cList = CustomerList()
             cList.CustomerListLayout(navController = navController)
         }
-        composable(Screens.CustomerDetails.route) {
+        composable(Screens.CustomerDetails.route + "/{customerID}",
+            arguments = listOf(
+                navArgument("customerID") {
+                    type = NavType.IntType
+                    defaultValue = 1
+                }
+            )){
             val cDetails = CustomerDetails()
-            cDetails.CustomerDetailsLayout(navController = navController)
+            cDetails.CustomerDetailsLayout(navController = navController, info = it.arguments)
         }
     }
 }
