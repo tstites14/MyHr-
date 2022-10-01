@@ -10,7 +10,8 @@ data class Customer(
     @ColumnInfo(name = "address") var address: String?,
     @ColumnInfo(name = "city") var city: String?,
     @ColumnInfo(name = "state") var state: String?,
-    @ColumnInfo(name = "phone") var phone: String?
+    @ColumnInfo(name = "phone") var phone: String?,
+    @ColumnInfo(name = "email") var email: String?
 )
 
 @Dao
