@@ -33,6 +33,9 @@ interface CustomerDao {
     @Insert
     fun insertNew(vararg customer: Customer)
 
+    @Update
+    fun updateExisting(customer: Customer)
+
     @Delete
     fun deleteExisting(customer: Customer)
 }
