@@ -52,10 +52,10 @@ class DBInitialization {
 
     private fun insertData(cd: CustomerDao) {
         if (cd.getTableEntries() == 0) {
-            val c1 = Customer(0, "Alphatronics", "807 Rockaway St.", "Chicago", "IL", "(773) 502-5088", "dev@alphatronics.com")
-            val c2 = Customer(0, "Apexi Co.", "906 Albany St.", "San Francisco", "CA", "(415) 251-3415", "dev@apexi.com")
-            val c3 = Customer(0, "Vertex Corporation", "647 Chestnut Lane", "New York", "NY", "(646) 463-9275", "dev@vertexco.com")
-            val c4 = Customer(0, "ImageWorks Systems", "810 Woodsman St.", "Orlando", "FL", "(407) 852-6028", "dev@imageworks.com")
+            val c1 = Customer(0, "Alphatronics", "807 Rockaway St.", "Chicago", "IL", "7735025088", "dev@alphatronics.com")
+            val c2 = Customer(0, "Apexi Co.", "906 Albany St.", "San Francisco", "CA", "415251-3415", "dev@apexi.com")
+            val c3 = Customer(0, "Vertex Corporation", "647 Chestnut Lane", "New York", "NY", "646463-9275", "dev@vertexco.com")
+            val c4 = Customer(0, "ImageWorks Systems", "810 Woodsman St.", "Orlando", "FL", "407852-6028", "dev@imageworks.com")
 
             cd.insertNew(c1, c2, c3, c4)
         }
