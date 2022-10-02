@@ -57,8 +57,8 @@ interface CustomerProjectDao {
     fun selectByCustomerId(id: Int): List<Customer>
 
     @RewriteQueriesToDropUnusedColumns
-    @Query("SELECT * FROM CustomerProject JOIN Project ON CustomerProject.projectID = Project.id WHERE CustomerProject.projectID = :id")
-    fun selectByProjectId(id: Int): List<Customer>
+    @Query("SELECT * FROM CustomerProject JOIN Project ON CustomerProject.projectID = Project.id WHERE CustomerProject.customerID = :id")
+    fun selectProjectsByCustomerID(id: Int): List<Project>
 
     @Query("SELECT COUNT(*) FROM CustomerProject")
     fun getTableEntries(): Int
