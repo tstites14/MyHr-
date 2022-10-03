@@ -35,8 +35,9 @@ class DBInitialization {
             val p3 = Project(0, "Project Jupiter", 0f)
             val p4 = Project(0, "Source", 0f)
             val p5 = Project(0, "Meridian", 0f)
+            val p6 = Project(0, "Project Zipper", 0f)
 
-            pd.insertNewProject(p1, p2, p3, p4, p5)
+            pd.insertNewProject(p1, p2, p3, p4, p5, p6)
         }
     }
 
@@ -64,11 +65,12 @@ class DBInitialization {
     private fun insertData(cpd: CustomerProjectDao) {
         if (cpd.getTableEntries() == 0) {
             val cp1 = CustomerProject(1, 2)
-            val cp2 = CustomerProject(2, 3)
-            val cp3 = CustomerProject(3, 4)
-            val cp4 = CustomerProject(4, 5)
+            val cp2 = CustomerProject(1, 3)
+            val cp3 = CustomerProject(2, 4)
+            val cp4 = CustomerProject(3, 5)
+            val cp5 = CustomerProject(4, 6)
 
-            cpd.insertNew(cp1, cp2, cp3, cp4)
+            cpd.insertNew(cp1, cp2, cp3, cp4, cp5)
         }
     }
 }
