@@ -67,17 +67,11 @@ fun Navigation() {
             val pList = ProjectList()
             pList.ProjectListLayout(navController = navController)
         }
-        composable(Screens.ProjectDetails.route + "/{id}/{title}/{progress}/",
+        composable(Screens.ProjectDetails.route + "/{id}",
             arguments = listOf(
                 navArgument("id") {
                     type = NavType.IntType
                     defaultValue = 1
-                }, navArgument("title") {
-                    type = NavType.StringType
-                    defaultValue = "MyHr+"
-                }, navArgument("progress") {
-                    type = NavType.FloatType
-                    defaultValue = 0f
                 })) {
             val pDetails = ProjectDetails()
             pDetails.ProjectDetailsLayout(navController = navController, projectInfo = it.arguments)
