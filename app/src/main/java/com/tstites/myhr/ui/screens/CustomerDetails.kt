@@ -65,7 +65,12 @@ class CustomerDetails {
             }
 
             when(currentTab.value) {
-                Rows.Details -> cDao.updateExisting(customerInfo(commonElements, data, context, cDao, navController))
+                Rows.Details ->  {
+                    if (data != null) {
+                        val customer = customerInfo(commonElements, data, context, cDao, navController)
+                        cDao.updateExisting(customer)
+                    }
+                }
                 Rows.Projects ->  {
                     val projects = customerProjects(data.id, cpDao, navController).toTypedArray()
                     pDao.updateExistingProject(*projects)
@@ -132,14 +137,15 @@ class CustomerDetails {
             Row(modifier = Modifier
                 .fillMaxWidth()) {
                 val editButtonText = remember{ mutableStateOf("Edit") }
+                val deleteButtonPressed = remember { mutableStateOf(false) }
 
                 if (textBoxState.value) {
                     editButtonText.value = "Save"
                 }
 
                 common.DefaultButton(text = editButtonText.value, modifier = Modifier
-                                                               .padding(12.dp)
-                                                               .weight(0.5f)) {
+                    .padding(12.dp)
+                    .weight(0.5f)) {
                     if (editButtonText.value.lowercase() == "save") {
                         cDao.updateExisting(customer)
 
@@ -149,9 +155,16 @@ class CustomerDetails {
                     textBoxState.value = true
                 }
                 common.DefaultButton(text = "Delete Entry", modifier = Modifier
-                                                                       .padding(12.dp)
-                                                                       .weight(0.5f)) {
+                    .padding(12.dp)
+                    .weight(0.5f)) {
+                    deleteButtonPressed.value = true
+                }
 
+                if (deleteButtonPressed.value) {
+                    common.defaultConfirmationAlert {
+                        cDao.deleteExisting(customer)
+                        navController.navigate(Screens.CustomerList.route)
+                    }
                 }
             }
         }
