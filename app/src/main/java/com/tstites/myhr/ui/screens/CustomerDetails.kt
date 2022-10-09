@@ -50,7 +50,7 @@ class CustomerDetails {
         val pDao = dbConnection.projectDao()
 
         //data objects
-        val data = cDao.selectById(info?.getInt("customerID") ?: 1)
+        val data = info?.getInt("customerID")?.let { cDao.selectById(it) } ?: Customer(0, "", "", "", "", "", "")
 
         Column(modifier = Modifier
             .fillMaxWidth()
@@ -147,7 +147,11 @@ class CustomerDetails {
                     .padding(12.dp)
                     .weight(0.5f)) {
                     if (editButtonText.value.lowercase() == "save") {
-                        cDao.updateExisting(customer)
+                        if (cDao.selectById(customer.id) != null)
+                            cDao.updateExisting(customer)
+                        else
+                            cDao.insertNew(customer)
+
 
                         navController.navigate(Screens.CustomerList.route)
                     }

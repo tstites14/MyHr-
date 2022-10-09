@@ -2,17 +2,23 @@ package com.tstites.myhr.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Refresh
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,20 +56,24 @@ class CustomerList {
             }
         }
 
-        Column(modifier = Modifier.fillMaxSize(),
-               verticalArrangement = Arrangement.Center) {
-            LazyColumn(modifier = Modifier
-                       .fillMaxWidth()
-                       .fillMaxHeight(0.93f)) {
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center
+        ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.93f)
+            ) {
                 items(data, itemContent = { customer ->
                     Row(modifier = Modifier.fillMaxWidth()) {
                         Card(shape = RoundedCornerShape(4.dp),
-                             modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(8.dp)
-                                        .clickable {
-                                            navController.navigate(Screens.CustomerDetails.route + "/${customer.id}")
-                                        }) {
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(8.dp)
+                                .clickable {
+                                    navController.navigate(Screens.CustomerDetails.route + "/${customer.id}")
+                                }) {
                             Column {
                                 Text(
                                     customer.name ?: "SAMPLE", style = TextStyle(
@@ -81,6 +91,38 @@ class CustomerList {
                     }
                 })
             }
+
+            BottomAppBar(backgroundColor = MaterialTheme.colors.primarySurface,
+                contentColor = contentColorFor(SnackbarDefaults.backgroundColor),
+                elevation = AppBarDefaults.BottomAppBarElevation,
+                content = {
+                    /*This is where the buttons and other content lives*/
+
+
+                    //A refresh button is important because the data (but not the original data) is
+                    //permanently modified when searching/filtering
+                    BottomNavigationItem(icon = {
+                        Icon(
+                            Icons.Outlined.Refresh,
+                            "Refresh Data", tint = Color.White
+                        )
+                    },
+                        onClick = {
+                            //Replace the modified data with the copy of the original data
+                            data.clear()
+                            data.addAll(originalData)
+                        }, selected = false
+                    )
+                    BottomNavigationItem(icon = {
+                        Icon(
+                            Icons.Outlined.Add,
+                            "Add New Customer", tint = Color.White
+                        )
+                    }, onClick = {
+                        navController.navigate(Screens.CustomerDetails.route)
+                    }, selected = false)
+                }
+            )
         }
     }
 
