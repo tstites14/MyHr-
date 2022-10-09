@@ -76,7 +76,7 @@ class CommonElements {
 
     @Composable
     fun defaultConfirmationAlert(delete: () -> Unit): Boolean {
-        val buttonPressed = remember { mutableStateOf(false) }
+        val buttonPressed = remember { mutableStateOf(true) }
 
         AlertDialog(onDismissRequest = { buttonPressed.value = false }, buttons = {
             Column {

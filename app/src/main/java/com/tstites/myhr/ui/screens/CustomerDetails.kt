@@ -161,10 +161,12 @@ class CustomerDetails {
                 }
 
                 if (deleteButtonPressed.value) {
-                    common.defaultConfirmationAlert {
+                    val status = common.defaultConfirmationAlert {
                         cDao.deleteExisting(customer)
                         navController.navigate(Screens.CustomerList.route)
                     }
+
+                    deleteButtonPressed.value = status
                 }
             }
         }
