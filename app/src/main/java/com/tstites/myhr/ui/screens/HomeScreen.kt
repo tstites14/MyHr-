@@ -1,6 +1,7 @@
 package com.tstites.myhr.ui.screens
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -13,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -26,36 +28,48 @@ class HomeScreen {
             verticalArrangement = Arrangement.Center) {
             IconButton(modifier = Modifier.weight(0.33f),
                 onClick = { navController.navigate(Screens.EmployeeList.route) }) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.8f),
-                        imageVector = Icons.Filled.Person,
-                        contentDescription = "Employee Lookup"
-                    )
-                    Text("Employee Records", modifier = Modifier.fillMaxWidth(),
-                        style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
+                Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp, bottom = 2.dp, start = 8.dp, end = 8.dp)) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.7f),
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = "Employee Lookup"
+                        )
+                        Text("Employee Records", modifier = Modifier.fillMaxWidth().padding(8.dp),
+                            style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
+                    }
                 }
             }
             IconButton(modifier = Modifier.weight(0.33f),
                 onClick = { navController.navigate(Screens.ProjectList.route) }) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.8f),
-                        imageVector = Icons.Filled.PlayArrow,
-                        contentDescription = "Project Management"
-                    )
-                    Text("Project Management", modifier = Modifier.fillMaxWidth(),
-                        style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
+                Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 2.dp, bottom = 2.dp, start = 8.dp, end = 8.dp)) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.7f),
+                            imageVector = Icons.Filled.PlayArrow,
+                            contentDescription = "Project Management"
+                        )
+                        Text("Project Management", modifier = Modifier.fillMaxWidth().padding(8.dp),
+                            style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
+                    }
                 }
             }
             IconButton(modifier = Modifier.weight(0.33f),
                 onClick = { navController.navigate(Screens.CustomerList.route) }) {
-                Column(modifier = Modifier.fillMaxWidth()) {
-                    Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.8f),
-                        imageVector = Icons.Filled.Face,
-                        contentDescription = "Customer Management"
-                    )
-                    Text("Customer Management",
-                        modifier = Modifier.fillMaxWidth(),
-                        style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
+                Card(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 2.dp, bottom = 2.dp, start = 8.dp, end = 8.dp)) {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Icon(modifier = Modifier.fillMaxWidth().fillMaxHeight(.7f),
+                            imageVector = Icons.Filled.Face,
+                            contentDescription = "Customer Management"
+                        )
+                        Text("Customer Management",
+                            modifier = Modifier.fillMaxWidth().padding(8.dp),
+                            style = TextStyle(fontSize = 24.sp, textAlign = TextAlign.Center))
+                    }
                 }
             }
         }
