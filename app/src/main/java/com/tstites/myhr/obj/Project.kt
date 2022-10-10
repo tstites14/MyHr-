@@ -40,7 +40,7 @@ interface ProjectDao {
     fun insertNewProject(vararg project: Project)
 
     @Update
-    fun updateExistingProject(project: Project)
+    fun updateExistingProject(vararg project: Project)
 
     @Delete
     fun deleteProject(project: Project): Int

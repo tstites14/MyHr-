@@ -39,12 +39,6 @@ class ProjectDetails {
         val elements = CommonElements()
         val textFieldState = remember { mutableStateOf(false) }
 
-        val project = Project(
-            projectInfo?.getInt("id") ?: 0,
-            projectInfo?.getString("title") ?: "",
-            projectInfo?.getFloat("progress") ?: 0f
-        )
-
         //Keep a list of current employees working on the project
         val data = remember { mutableStateListOf<ProjectEmployee>() }
 
@@ -54,6 +48,7 @@ class ProjectDetails {
         val projectEmployeeDao = dbConnection.projectEmployeeDao()
         val employeeDao = dbConnection.employeeDao()
 
+        val project = projectDao.getProjectById(projectInfo?.getInt("id") ?: 1)
 
         runBlocking {
             //Insert data into the database if the table is empty
@@ -293,7 +288,7 @@ class ProjectDetails {
                     dao.deleteProjectEmployeeByID(employee.id, project.id)
 
                     navController.navigate(Screens.ProjectDetails.route +
-                        "/${project.id}/${project.title}/${project.progress}/")
+                        "/${project.id}")
                 },
                 modifier = Modifier
                     .drawWithContent { drawContent() }

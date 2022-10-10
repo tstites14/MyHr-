@@ -1,22 +1,26 @@
 package com.tstites.myhr.ui.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.material.Button
-import androidx.compose.material.Text
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.TextField
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.room.Dao
+import com.tstites.myhr.ui.screens.Screens
 
 /*Android uses the Jetpack Compose system to display the UI. This uses @Composable functions
 * to set up individual UI elements with their own states and variables that may be modified individually.
@@ -68,6 +72,35 @@ class CommonElements {
             shape = RoundedCornerShape(4.dp), enabled = state, placeholder = { Text(placeholder) },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
+    }
+
+    @Composable
+    fun defaultConfirmationAlert(delete: () -> Unit): Boolean {
+        val buttonPressed = remember { mutableStateOf(true) }
+
+        AlertDialog(onDismissRequest = { buttonPressed.value = false }, buttons = {
+            Column {
+                Text("Are you sure you would like to delete this entry?",
+                    modifier = Modifier.padding(24.dp), textAlign = TextAlign.Center)
+
+                Row {
+                    Button(onClick = {
+                        delete()
+
+                        buttonPressed.value = false
+                    }, modifier = Modifier.fillMaxWidth(0.5f).padding(8.dp)) {
+                        Text("Confirm")
+                    }
+                    Button(onClick = {
+                        buttonPressed.value = false
+                    }, modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+                        Text("Dismiss")
+                    }
+                }
+            }
+        })
+
+        return buttonPressed.value
     }
 
     /*The @Preview annotation allows Android Studio to display a realtime preview of the given

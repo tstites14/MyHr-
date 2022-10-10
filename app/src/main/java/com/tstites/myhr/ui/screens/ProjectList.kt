@@ -61,9 +61,9 @@ class ProjectList {
                                 .padding(8.dp)
                                 .clickable {
                                     navController.navigate(Screens.ProjectDetails.route +
-                                        "/${project.id}/${project.title}/${project.progress}/")
-                                }
-                        ) {
+                                        "/${project.id}")
+                                })
+                        {
                             Column {
                                 Text(project.title ?: "Missing Data", style = TextStyle(fontSize = 20.sp),
                                     modifier = Modifier.padding(16.dp))
